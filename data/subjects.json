@@ -7,7 +7,7 @@
           "title": "Cours 2",
           "notes": [],
           "files": [
-            "C:\\Users\\sipan\\Documents\\OneClass\\sync_files\\Algèbre_linéaire_pour_analyse_(MDD_351)\\Cours_2\\CM2.pdf"
+            "/data/user/0/com.sipanbareyan.oneclass/app_flutter/OneClass/sync_files/Algèbre_linéaire_pour_analyse_(MDD_351)/Cours_2/CM2.pdf"
           ],
           "images": [],
           "videos": []
@@ -23,7 +23,7 @@
           "title": "Cours 2",
           "notes": [],
           "files": [
-            "C:\\Users\\sipan\\Documents\\OneClass\\sync_files\\Inférence_statistique_(MDD_353)\\Cours_2\\CM2.pdf"
+            "/data/user/0/com.sipanbareyan.oneclass/app_flutter/OneClass/sync_files/Inférence_statistique_(MDD_353)/Cours_2/CM2.pdf"
           ],
           "images": [],
           "videos": []
@@ -39,7 +39,7 @@
           "title": "test",
           "notes": [],
           "files": [
-            "C:\\Users\\sipan\\Documents\\OneClass\\sync_files\\Travaux_doc_et_articles\\test\\Cours 1.pdf"
+            "/data/user/0/com.sipanbareyan.oneclass/app_flutter/OneClass/sync_files/Travaux_doc_et_articles/test/Cours 1.pdf"
           ],
           "images": [],
           "videos": []
@@ -47,7 +47,27 @@
       ],
       "globalFiles": [],
       "globalImages": []
+    },
+    "O&A": {
+      "name": "O&A",
+      "contentGroups": [
+        {
+          "title": "TD0",
+          "notes": [],
+          "files": [
+            "/data/user/0/com.sipanbareyan.oneclass/app_flutter/OneClass/sync_files/O&A/TD0/Oa.pdf"
+          ],
+          "images": [
+            "/data/user/0/com.sipanbareyan.oneclass/cache/27225173-b1e8-4cdb-a91f-015acd43934a/50.jpg",
+            "/data/user/0/com.sipanbareyan.oneclass/cache/46ca8ff6-06d0-452e-a4b1-9998af91c7ee/49.jpg",
+            "/data/user/0/com.sipanbareyan.oneclass/cache/8e346a6a-8a59-4015-9000-5fbedbec0e7c/48.jpg"
+          ],
+          "videos": []
+        }
+      ],
+      "globalFiles": [],
+      "globalImages": []
     }
   },
-  "exportedAt": "2026-01-15T16:20:32.224184"
+  "exportedAt": "2026-01-15T18:10:40.820641"
 }
