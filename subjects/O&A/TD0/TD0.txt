@@ -1,0 +1,160 @@
+\begin{document}
+\sloppy
+
+\title{TD0 -- Optimisation et applications \\ Programmation linéaire -- Théorèmes fondamentaux}
+\maketitle
+
+Ce TD a pour objectif de vous faire démontrer les théorèmes importants sur les programmes linéaires.
+
+Un programme linéaire peut s'écrire, sous forme \textbf{système}, comme :
+\[
+\begin{cases}
+\text{maximiser } c_1 x_1 + \dots + c_n x_n, \\
+a_{11} x_1 + \dots + a_{1n} x_n \leq b_1, \\
+\vdots \\
+a_{m1} x_1 + \dots + a_{mn} x_n \leq b_m, \\
+x_1, \dots, x_n \geq 0.
+\end{cases}
+\]
+
+Dans ce TD, on adopte la \textbf{forme matricielle équivalente} :
+\[ \max f(x) = c^T x \text{ sous les contraintes } Ax \leq b, x \geq 0. \]
+
+Ici :
+\begin{itemize}
+    \item $x = \begin{pmatrix} x_1 \\ x_2 \\ \vdots \\ x_n \end{pmatrix} \in \mathbb{R}^n$ est le vecteur des variables (solution candidate) ;
+    \item $c = \begin{pmatrix} c_1 \\ c_2 \\ \vdots \\ c_n \end{pmatrix} \in \mathbb{R}^n$ est le vecteur des coefficients de la fonction objectif ;
+    \item $A = \begin{pmatrix} a_{11} & a_{12} & \dots & a_{1n} \\ a_{21} & a_{22} & \dots & a_{2n} \\ \vdots & \vdots & \ddots & \vdots \\ a_{m1} & a_{m2} & \dots & a_{mn} \end{pmatrix} \in \mathbb{R}^{m \times n}$ est la matrice des contraintes ;
+    \item $b = \begin{pmatrix} b_1 \\ b_2 \\ \vdots \\ b_m \end{pmatrix} \in \mathbb{R}^m$ est le vecteur des seconds membres.
+\end{itemize}
+
+L'ensemble des solutions réalisables est donc :
+\[ P = \{ x \in \mathbb{R}^n \mid Ax \leq b, x \geq 0 \}. \]
+
+\section*{Exercice 1 -- Convexité de l'ensemble réalisable}
+
+\begin{enumerate}
+    \item Soient $x_1$ et $x_2$ deux solutions réalisables. Écrire les inégalités qu'elles vérifient.
+    \item Soit $\alpha \in [0, 1]$. Montrer que $x = \alpha x_1 + (1 - \alpha) x_2$ vérifie encore $Ax \leq b$.
+    \item Montrer que $x \geq 0$.
+    \item Conclure que $P$ est convexe.
+\end{enumerate}
+
+\begin{solution}
+\begin{enumerate}
+    \item Puisque $x_1, x_2 \in P$, elles vérifient par définition :
+    \[ Ax_1 \leq b, \quad x_1 \geq 0 \]
+    \[ Ax_2 \leq b, \quad x_2 \geq 0 \]
+
+    \item Soit $\alpha \in [0, 1]$. On pose $x = \alpha x_1 + (1 - \alpha) x_2$. Calculons $Ax$ :
+    \begin{align*}
+    Ax &= A(\alpha x_1 + (1 - \alpha) x_2) \\
+    &= \alpha Ax_1 + (1 - \alpha) Ax_2
+    \end{align*}
+    On utilise les inégalités de la question 1 pour conclure. Comme $\alpha \geq 0$ et $(1 - \alpha) \geq 0$ :
+    \[ \alpha Ax_1 \leq \alpha b \]
+    \[ (1 - \alpha) Ax_2 \leq (1 - \alpha) b \]
+    En sommant ces deux membres :
+    \[ \alpha Ax_1 + (1 - \alpha) Ax_2 \leq \alpha b + (1 - \alpha) b = (\alpha + 1 - \alpha) b = b \]
+    D'où $Ax \leq b$.
+
+    \item De même, comme $\alpha \geq 0$, $x_1 \geq 0$ et $(1 - \alpha) \geq 0$, $x_2 \geq 0$, on a :
+    \[ \alpha x_1 + (1 - \alpha) x_2 \geq 0 \]
+    Donc $x \geq 0$.
+
+    \item Les points $x$ obtenus par combinaison convexe de deux points de $P$ appartiennent toujours à $P$ (car ils vérifient les inégalités de définition de $P$). On vérifie ainsi l'inégalité de convexité, donc $P$ est convexe.
+\end{enumerate}
+\end{solution}
+
+\section*{Exercice 2 -- Optimum et sommets}
+
+On suppose que l'ensemble réalisable $P$ est non vide et borné. On admet alors que $P$ est un polyèdre convexe possédant un nombre fini de sommets, que l'on note $x_1, \dots, x_p$. Soit $x_0$ une solution réalisable optimale, c'est-à-dire $f(x_0) \geq f(x) \, \forall x \in P$.
+
+\begin{enumerate}
+    \item Supposons que $x_0$ n'est pas un sommet. Réécrire $x_0$ en fonction des sommets de $P$.
+    \item Soit $f(x_m) = \max \{ f(x_1), \dots, f(x_p) \}$. En utilisant la linéarité de $f$, montrer que $f(x_m) \geq f(x_0)$.
+    \item En déduire que la fonction objectif atteint son maximum sur au moins un sommet de $P$.
+    \item Supposons que le maximum de $f$ sur $P$ soit atteint pour plusieurs sommets $x_{I_1}, \dots, x_{I_q}$. Montrer que toute combinaison convexe de ces sommets est également optimale.
+\end{enumerate}
+
+\begin{solution}
+\begin{enumerate}
+    \item Si $x_0$ n'est pas un sommet, comme $P$ est un polyèdre borné, $x_0$ peut s'écrire comme une combinaison convexe des sommets de $P$. Il existe $\alpha_1, \dots, \alpha_p$ tels que :
+    \[ \sum_{i=1}^p \alpha_i = 1, \quad \alpha_i \geq 0 \quad \text{et} \quad x_0 = \alpha_1 x_1 + \dots + \alpha_p x_p \]
+    On peut estimer les poids par exemple via $\alpha_i' = d(x_0, x_i)$ et $\alpha_i = \frac{\alpha_i'}{\sum_j \alpha_j'}$.
+
+    \item Par linéarité de la fonction objectif $f$ :
+    \begin{align*}
+    f(x_0) &= f(\alpha_1 x_1 + \dots + \alpha_p x_p) \\
+    &= \alpha_1 f(x_1) + \dots + \alpha_p f(x_p)
+    \end{align*}
+    En posant $f(x_m)$ le maximum des valeurs de $f$ sur les sommets, on a $f(x_i) \leq f(x_m)$ pour tout $i$. Ainsi :
+    \[ f(x_0) \leq (\alpha_1 + \dots + \alpha_p) f(x_m) = 1 \cdot f(x_m) = f(x_m) \]
+    Donc $f(x_m) \geq f(x_0)$.
+
+    \item Puisque $x_0$ est optimal, on a par définition $f(x_0) \geq f(x)$ pour tout $x \in P$, et en particulier $f(x_0) \geq f(x_m)$. Comme on vient de montrer que $f(x_m) \geq f(x_0)$, on en déduit $f(x_0) = f(x_m)$.
+    Ainsi, pour tout point à l'extérieur (ou à l'intérieur du polyèdre), $f(x_0) \leq f(x_m)$ où $x_m$ est un sommet. Tout point sur le bord (sauf les sommets) est aussi sous-optimal comme sur un polytope de dimension $p-1$ (même preuve par récurrence). L'optimum est donc atteint sur au moins un sommet.
+
+    \item Soit $\{x_{I_1}, \dots, x_{I_m}\}$ la famille des sommets qui réalisent l'optimum $M$. Soit une combinaison convexe de ces sommets avec $\sum \beta_j = 1$ et $\beta_j \geq 0$ :
+    \begin{align*}
+    f(\beta_1 x_{I_1} + \dots + \beta_m x_{I_m}) &= \beta_1 f(x_{I_1}) + \dots + \beta_m f(x_{I_m}) \\
+    &= (\beta_1 + \dots + \beta_m) M = M
+    \end{align*}
+    La valeur de la fonction objectif est égale à l'optimum $M$, donc la combinaison convexe est également optimale.
+\end{enumerate}
+\end{solution}
+
+\section*{Exercice 3 -- Sommets et colonnes de la matrice $A$}
+
+Le but de cet exercice est de trouver une relation entre les sommets du polyèdre $P$ et les colonnes de $A$. On note $A^1, \dots, A^n$ les colonnes de la matrice $A$. On a donc $Ax = \sum_{j=1}^n x_j A^j$.
+
+\subsection*{Partie A -- À partir de vecteurs linéairement indépendants}
+
+On suppose qu'il existe des indices $v_1, \dots, v_k$ tels que les colonnes $A^{v_1}, \dots, A^{v_k}$ soient linéairement indépendantes et
+\[ b = \sum_{i=1}^k x_{v_i} A^{v_i}, \quad x_{v_i} \geq 0, \]
+les autres composantes de $x$ étant nulles.
+
+\begin{enumerate}
+    \item Donner les coordonnées de $x$ dans ce cas.
+    \item On suppose que $x$ n'est pas un sommet : écrire $x$ comme combinaison convexe non triviale de deux points distincts $y$ et $z$ de $P$.
+    \item Exprimer $b$ comme combinaison linéaire des colonnes $A^j$ à l'aide des coordonnées de $y$, puis faire de même avec $z$.
+    \item En utilisant l'hypothèse sur les colonnes de $A$, que peut-on en déduire sur $y$ et $z$ ? Et sur $x$ ?
+\end{enumerate}
+
+\begin{solution}
+\begin{enumerate}
+    \item Les coordonnées de $x$ sont $x_{v_i}$ pour les indices correspondants aux colonnes indépendantes, et $0$ sinon.
+    \item Si $x$ n'est pas un sommet, il existe $\alpha \in ]0, 1[$ tel que $x = \alpha y + (1 - \alpha) z$ avec $y, z \in P$ et $y \neq z$.
+    \item Puisque $y \in P$ et $z \in P$, et en considérant que seules les colonnes $A^{v_i}$ interviennent (les autres composantes étant nulles pour simplifier l'identification au système), on a :
+    \[ b = \sum_{i=1}^k y_{v_i} A^{v_i} \quad \text{et} \quad b = \sum_{i=1}^k z_{v_i} A^{v_i} \]
+    Comme les colonnes $\{A^{v_1}, \dots, A^{v_k}\}$ forment une famille libre (linéairement indépendante), la décomposition du vecteur $b$ dans cette base est unique.
+    \item On en déduit donc $y_{v_i} = z_{v_i}$ pour tout $i$. Par conséquent $y = z$.
+    C'est une contradiction avec l'hypothèse $y \neq z$. Donc $x$ ne peut pas être exprimé comme une combinaison convexe de points distincts de $P$. En conclusion, $x$ est bien un sommet.
+\end{enumerate}
+\end{solution}
+
+\subsection*{Partie B -- À partir d'un sommet}
+
+Soit $x$ un sommet de $P$. Quitte à renuméroter les variables, on suppose que les $k$ premières composantes de $x$ sont strictement positives et que les autres sont nulles :
+\[ x_1 > 0, x_2 > 0, \dots, x_k > 0, \quad x_{k+1} = \dots = x_n = 0. \]
+On veut montrer que les colonnes $A^1, \dots, A^k$ sont linéairement indépendantes, en raisonnant par l'absurde.
+
+\begin{enumerate}
+    \item Supposons que les colonnes $A^1, \dots, A^k$ soient linéairement dépendantes. Montrer qu'il existe un vecteur $d \in \mathbb{R}^n$, non nul, tel que $Ad = 0$ et $d_j = 0$ pour tout $j \in \{k+1, \dots, n\}$.
+    \item Montrer qu'il existe $\epsilon > 0$ tel que les deux points $x^+ = x + \epsilon d$ et $x^- = x - \epsilon d$ appartiennent à $P$.
+    \item En déduire que $x$ peut s'écrire comme combinaison convexe non triviale de $x^+$ et $x^-$, et conclure.
+\end{enumerate}
+
+\begin{solution}
+\begin{enumerate}
+    \item Par algèbre linéaire, si les colonnes sont liées, l'écriture du vecteur nul comme combinaison linéaire n'est pas unique. Il existe donc une combinaison linéaire non triviale $\sum_{j=1}^k d_j A^j = 0$. On définit alors le vecteur $d = (d_1, \dots, d_k, 0, \dots, 0) \neq 0$ tel que $Ad = 0$.
+    \item Calculons $A(x \pm \epsilon d)$ :
+    \[ A(x \pm \epsilon d) = Ax \pm \epsilon Ad = Ax \pm 0 = Ax \leq b \]
+    Pour que $x \pm \epsilon d \in P$, il faut aussi vérifier la positivité. Comme $x_j > 0$ pour $j \in \{1, \dots, k\}$, on peut choisir $\epsilon$ suffisamment petit pour que $x_j \pm \epsilon d_j > 0$. Pour $j > k$, $x_j = 0$ et $d_j = 0$, donc la condition est respectée. Ainsi, $x^+ \in P$ et $x^- \in P$.
+    \item On remarque que :
+    \[ x = \frac{x^+ + x^-}{2} \]
+    C'est-à-dire que $x$ est le milieu du segment $[x^-, x^+]$. Ceci montre que $x$ peut s'écrire comme une combinaison convexe de deux points distincts de $P$. Cela signifie que $x$ n'est pas un sommet, ce qui est \textbf{ABSURDE} au vu de l'hypothèse initiale. Par conséquent, les colonnes $A^1, \dots, A^k$ sont obligatoirement linéairement indépendantes.
+\end{enumerate}
+\end{solution}
+
+\end{document}
