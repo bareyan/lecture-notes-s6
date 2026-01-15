@@ -7,9 +7,11 @@
           "title": "Cours 2",
           "notes": [],
           "files": [
-            "/data/user/0/com.sipanbareyan.oneclass/app_flutter/OneClass/sync_files/Algèbre_linéaire_pour_analyse_(MDD_351)/Cours_2/CM2.pdf"
+            "C:\\Users\\sipan\\Documents\\OneClass\\sync_files\\Algèbre_linéaire_pour_analyse_(MDD_351)\\Cours_2\\CM2.pdf"
           ],
-          "images": [],
+          "images": [
+            "D:\\University\\S5\\Proba\\fm8.jpg"
+          ],
           "videos": []
         }
       ],
@@ -23,7 +25,7 @@
           "title": "Cours 2",
           "notes": [],
           "files": [
-            "/data/user/0/com.sipanbareyan.oneclass/app_flutter/OneClass/sync_files/Inférence_statistique_(MDD_353)/Cours_2/CM2.pdf"
+            "C:\\Users\\sipan\\Documents\\OneClass\\sync_files\\Inférence_statistique_(MDD_353)\\Cours_2\\CM2.pdf"
           ],
           "images": [],
           "videos": []
@@ -39,7 +41,7 @@
           "title": "test",
           "notes": [],
           "files": [
-            "/data/user/0/com.sipanbareyan.oneclass/app_flutter/OneClass/sync_files/Travaux_doc_et_articles/test/Cours 1.pdf"
+            "C:\\Users\\sipan\\Documents\\OneClass\\sync_files\\Travaux_doc_et_articles\\test\\Cours 1.pdf"
           ],
           "images": [],
           "videos": []
@@ -55,7 +57,7 @@
           "title": "TD0",
           "notes": [],
           "files": [
-            "/data/user/0/com.sipanbareyan.oneclass/app_flutter/OneClass/sync_files/O&A/TD0/Oa.pdf"
+            "C:\\Users\\sipan\\Documents\\OneClass\\sync_files\\O&A\\TD0\\Oa.pdf"
           ],
           "images": [
             "/data/user/0/com.sipanbareyan.oneclass/cache/27225173-b1e8-4cdb-a91f-015acd43934a/50.jpg",
@@ -67,7 +69,21 @@
       ],
       "globalFiles": [],
       "globalImages": []
+    },
+    "Equa diff et résolution num (MDD 352)": {
+      "name": "Equa diff et résolution num (MDD 352)",
+      "contentGroups": [
+        {
+          "title": "Cours 1",
+          "notes": [],
+          "files": [],
+          "images": [],
+          "videos": []
+        }
+      ],
+      "globalFiles": [],
+      "globalImages": []
     }
   },
-  "exportedAt": "2026-01-15T18:10:40.820641"
+  "exportedAt": "2026-01-15T20:23:13.777552"
 }
