@@ -1,0 +1,128 @@
+{
+  "scheduleByDay": {
+    "Monday": [
+      {
+        "id": "8e37aef3-c827-47a0-9dc3-b1d6f5ee8559",
+        "subjectName": "Algèbre linéaire pour analyse (MDD 351)",
+        "classType": "Guided Practice",
+        "classroom": "O A1",
+        "startTime": "8:15",
+        "endTime": "10:15"
+      },
+      {
+        "id": "6492dfd0-c2cb-4512-91ac-b01a5ae0bf01",
+        "subjectName": "Inférence statistique (MDD 353)",
+        "classType": "Guided Practice",
+        "classroom": "O A1",
+        "startTime": "10:30",
+        "endTime": "12:30"
+      },
+      {
+        "id": "ee94b57a-86ef-444a-a23e-f5dc22cf76fa",
+        "subjectName": "Inférence statistique (MDD 353)",
+        "classType": "Lecture",
+        "classroom": "Amphi Yoccoz",
+        "startTime": "13:30",
+        "endTime": "15:30"
+      },
+      {
+        "id": "fe0fc4f7-dde2-4b37-b467-338a35706385",
+        "subjectName": "Equa diff et résolution num (MDD 352)",
+        "classType": "Guided Practice",
+        "classroom": "O D10",
+        "startTime": "15:45",
+        "endTime": "17:45"
+      }
+    ],
+    "Tuesday": [
+      {
+        "id": "4f9e858e-6e50-4adb-a81d-fdfe2c3769cf",
+        "subjectName": "Algèbre linéaire pour analyse (MDD 351)",
+        "classType": "Lecture",
+        "classroom": "Amphi Yoccoz",
+        "startTime": "8:15",
+        "endTime": "10:15"
+      },
+      {
+        "id": "97fe28b2-1c1a-4902-9ac2-7ab970a8acd1",
+        "subjectName": "Equa diff et résolution num (MDD 352)",
+        "classType": "Lecture",
+        "classroom": "Amphi Yoccoz",
+        "startTime": "10:30",
+        "endTime": "12:30"
+      },
+      {
+        "id": "3d71fd59-b1c4-451c-8129-986c053ee79f",
+        "subjectName": "Travaux doc et articles",
+        "classType": "Applied Practice",
+        "classroom": "D203",
+        "startTime": "14:00",
+        "endTime": "17:30"
+      }
+    ],
+    "Wednesday": [
+      {
+        "id": "c456a5fc-d37b-4c50-99e2-43dda461f8fa",
+        "subjectName": "Algo distribuée et parallélisation",
+        "classType": "Lecture",
+        "classroom": "B108",
+        "startTime": "9:00",
+        "endTime": "10:30"
+      },
+      {
+        "id": "fb6f23dc-d276-4586-aa0c-f75b0b37ced5",
+        "subjectName": "Algo distribuée et parallélisation",
+        "classType": "Applied Practice",
+        "classroom": "G5/D202, G6/D104",
+        "startTime": "10:45",
+        "endTime": "12:45"
+      },
+      {
+        "id": "980e21e6-25aa-42da-88f1-a7b1f2aee9d8",
+        "subjectName": "Fairness",
+        "classType": "Applied Practice",
+        "classroom": "E203",
+        "startTime": "13:30",
+        "endTime": "17:45"
+      }
+    ],
+    "Thursday": [
+      {
+        "id": "a4031bc6-90f7-44b9-a633-c3156d089519",
+        "subjectName": "Sécurité et sûreté",
+        "classType": "Lecture",
+        "classroom": "D203",
+        "startTime": "9:00",
+        "endTime": "10:30"
+      },
+      {
+        "id": "b710874b-50f0-464a-b5a6-67c263fd0b1b",
+        "subjectName": "Sécurité et sûreté",
+        "classType": "Guided Practice",
+        "classroom": "G5/D203, G6/C205",
+        "startTime": "10:45",
+        "endTime": "12:45"
+      },
+      {
+        "id": "bfec1466-e290-4988-86b3-8c2516033b01",
+        "subjectName": "O&A",
+        "classType": "Lecture",
+        "classroom": "P. Amphi",
+        "startTime": "14:00",
+        "endTime": "15:30"
+      },
+      {
+        "id": "7f92bfd1-7a44-46da-ab75-004d4d738694",
+        "subjectName": "O&A",
+        "classType": "Guided Practice",
+        "classroom": "G5/D201, G6/D203",
+        "startTime": "15:45",
+        "endTime": "17:45"
+      }
+    ],
+    "Friday": [],
+    "Saturday": [],
+    "Sunday": []
+  },
+  "exportedAt": "2026-01-15T15:19:07.990959"
+}
