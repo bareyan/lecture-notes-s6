@@ -1,0 +1,281 @@
+\begin{document}
+\sloppy
+
+\title{CM2 : Le Cadre Paramétrique et Méthodes d'Estimation}
+\maketitle
+
+\section{Le Cadre Paramétrique}
+
+Dans ce chapitre, nous abordons l'estimation statistique dans un contexte paramétrique.
+
+\begin{definition}[Modèle statistique paramétrique]
+On dispose d'une observation $(X_1, \dots, X_n)$ constituant un échantillon de variables aléatoires indépendantes et identiquement distribuées (i.i.d.) de loi commune $P$ appartenant à une famille de lois de probabilités paramétrée :
+\[ \{ P_\theta, \theta \in \Theta \subset \mathbb{R}^p \} \]
+\end{definition}
+
+\begin{remark}
+Si l'espace des paramètres $\Theta$ est de dimension infinie, on parle alors de modèle \textbf{non-paramétrique}.
+\end{remark}
+
+\paragraph{Problématique :}
+Estimer la loi $P$ revient à estimer le paramètre inconnu $\theta \in \mathbb{R}^p$.
+
+\begin{example}
+Voici quelques exemples classiques de modèles paramétriques :
+\begin{itemize}
+    \item Loi de Bernoulli : $\text{Bern}(\theta)$
+    \item Loi Normale : $\mathcal{N}(\mu, \sigma^2)$
+    \item Loi de puissance : $f_\theta(x) = \theta x^{\theta-1} \mathbb{1}_{x \in [0, 1]}$
+    \item Loi Exponentielle : $\text{Exp}(\theta)$
+\end{itemize}
+\end{example}
+
+\paragraph{Notations :}
+\begin{itemize}
+    \item $E_\theta[h(X_1, \dots, X_n)]$ désigne l'espérance sous la loi $P_\theta$.
+    \item La loi du vecteur $(X_1, \dots, X_n)$ est notée $P_\theta^{\otimes n}$.
+\end{itemize}
+
+\begin{definition}[Estimateur]
+Un estimateur de $\theta$ est une fonction des observations :
+\[ \hat{\theta} = \hat{\theta}_n = h(X_1, \dots, X_n) \]
+\end{definition}
+
+\paragraph{Qualité d'un estimateur :}
+Pour évaluer la performance d'un estimateur, on utilise principalement deux critères :
+\begin{enumerate}
+    \item \textbf{Risque quadratique :} $R(\hat{\theta}, \theta) = E\left[(\hat{\theta} - \theta)^2\right]$
+    \item \textbf{Consistance :} L'estimateur est dit consistant si $\hat{\theta}_n \xrightarrow[n \to \infty]{P} \theta$ (convergence en probabilité).
+\end{enumerate}
+
+\begin{definition}[Modèle identifiable]
+Un modèle est dit identifiable si l'application $\theta \to P_\theta$ est injective.
+\end{definition}
+
+\section{La Méthode des Moments (MM)}
+
+\begin{definition}
+Soit $k \geq 1$. On définit :
+\begin{itemize}
+    \item Le \textbf{moment théorique} d'ordre $k$ de la loi des $X_i$ : $M_k = E[X_i^k]$.
+    \item Le \textbf{moment empirique} d'ordre $k$ de la loi des $X_i$ : $\hat{M}_k = \frac{1}{n} \sum_{i=1}^n X_i^k$.
+\end{itemize}
+\end{definition}
+
+D'après la \textbf{Loi des Grands Nombres (LGN)}, on a la convergence suivante :
+\[ \hat{M}_k \xrightarrow[n \to \infty]{P} M_k \]
+
+\paragraph{Principe de la méthode :}
+Si l'on peut exprimer le paramètre d'intérêt $\theta$ (ou une fonction $g(\theta)$) comme une fonction $\varphi$ des $k$ premiers moments théoriques :
+\[ \theta = \varphi(M_1, \dots, M_k) \]
+Alors, l'estimateur par la méthode des moments est obtenu en remplaçant les moments théoriques par les moments empiriques :
+\[ \hat{\theta} = \varphi(\hat{M}_1, \dots, \hat{M}_k) \]
+
+\begin{example}[Loi de Bernoulli]
+Soit $X_i \sim \text{Ber}(\theta)$. On a $\theta = P(X_i = 1) = E[X_i]$.
+Le moment théorique est $M_1 = E[X_i]$.
+L'estimateur est donc :
+\[ E[X_i] \rightsquigarrow \frac{1}{n} \sum_{i=1}^n X_i = \bar{X} \implies \hat{\theta} = \bar{X} \]
+\end{example}
+
+\begin{example}[Loi Exponentielle]
+Soit $X_i \sim \text{Exp}(\theta)$ de densité $f_\theta(x) = \theta e^{-\theta x} \mathbb{1}_{x \geq 0}$.
+On sait que $M_1 = E[X_1] = \frac{1}{\theta}$, d'où $\theta = \frac{1}{M_1}$.
+L'estimateur des moments est :
+\[ \hat{\theta} = \frac{1}{\hat{M}_1} = \frac{1}{\bar{X}} \]
+\end{example}
+
+\begin{example}[Loi de puissance]
+Soient $X_1, \dots, X_n$ i.i.d. de loi $P_\theta$ de densité $f_\theta(x) = \theta x^{\theta-1} \mathbb{1}_{x \in [0, 1]}$ avec $\theta > 0$.
+Calculons le premier moment théorique :
+\begin{align*}
+M_1 = E[X] &= \int_0^1 x \cdot \theta x^{\theta-1} dx = \theta \int_0^1 x^\theta dx \\
+&= \theta \left[ \frac{x^{\theta+1}}{\theta+1} \right]_0^1 = \frac{\theta}{\theta+1}
+\end{align*}
+On isole $\theta$ :
+\begin{align*}
+(\theta + 1) M_1 = \theta &\iff \theta M_1 + M_1 = \theta \\
+&\iff \theta(1 - M_1) = M_1 \\
+&\iff \theta = \frac{M_1}{1 - M_1}
+\end{align*}
+L'estimateur des moments est :
+\[ \hat{\theta}_M = \frac{\bar{X}}{1 - \bar{X}} \]
+\textit{Note :} Si $\bar{X} = 1$, l'estimateur n'est pas défini. Cependant, $P_\theta(\bar{X} = 1) = P_\theta(X_1 = X_2 = \dots = X_n = 1) = 0$.
+\end{example}
+
+\section{Le Lemme d'Application Continue (LAC)}
+
+Une question fondamentale est de savoir si l'estimateur des moments est consistant. Pour cela, on utilise le Lemme d'Application Continue.
+
+\begin{lemma}[Lemme d'Application Continue - LAC]
+Soit $(X_n)_{n \geq 1}$ une suite de variables aléatoires.
+Si $X_n \xrightarrow{P} X$ et si $g$ est une fonction continue, alors :
+\[ g(X_n) \xrightarrow{P} g(X) \]
+De même, si $X_n \xrightarrow{\mathcal{L}} X$, alors $g(X_n) \xrightarrow{\mathcal{L}} g(X)$.
+\end{lemma}
+
+\begin{remark}
+Une condition suffisante de continuité en présence de points de discontinuité $D_g$ est $P(X \in D_g) = 0$.
+\end{remark}
+
+\begin{example}
+Pour l'exemple précédent $g(x) = \frac{x}{1-x}$.
+Par la LGN, $\bar{X} \xrightarrow{P} E[X]$.
+Par le LAC, si $g$ est continue en $E[X]$, alors $g(\bar{X}) \xrightarrow{P} g(E[X]) = \theta$.
+L'estimateur est donc consistant.
+\end{example}
+
+\paragraph{LAC pour des couples :}
+Soient $(X_n, Y_n)$ des suites de variables aléatoires.
+\begin{itemize}
+    \item Si $(X_n, Y_n) \xrightarrow{P} (X, Y)$ et si $g: \mathbb{R}^2 \to \mathbb{R}$ est continue, alors $g(X_n, Y_n) \xrightarrow{P} g(X, Y)$.
+    \item Si $(X_n, Y_n) \xrightarrow{\mathcal{L}} (X, Y)$, alors $g(X_n, Y_n) \xrightarrow{\mathcal{L}} g(X, Y)$.
+\end{itemize}
+
+\begin{remark}
+La convergence des couples est équivalente à la convergence de chaque composante pour la probabilité :
+\[ (X_n, Y_n) \xrightarrow{P} (X, Y) \iff X_n \xrightarrow{P} X \text{ et } Y_n \xrightarrow{P} Y \]
+\textbf{Attention :} Cette réciproque est fausse pour la convergence en loi !
+\end{remark}
+
+\section{Étude de la Variance Empirique}
+
+Si les $X_i$ admettent une espérance $\mu$ et une variance $\sigma^2$, on appelle \textbf{variance empirique} :
+\[ \hat{\sigma}_n^2 = \frac{1}{n} \sum_{i=1}^n (X_i - \bar{X})^2 \]
+En développant, on obtient :
+\begin{align*}
+\hat{\sigma}_n^2 &= \frac{1}{n} \sum X_i^2 + \frac{1}{n} \sum \bar{X}^2 - \frac{2}{n} \sum X_i \bar{X} \\
+&= \frac{1}{n} \sum X_i^2 + \bar{X}^2 - 2 \bar{X} \bar{X} \\
+&= \frac{1}{n} \sum X_i^2 - (\bar{X})^2 = \tilde{\sigma}^2
+\end{align*}
+
+\paragraph{Estimateur des moments :}
+Puisque $\sigma^2 = E[X^2] - (E[X])^2$, on remplace les moments théoriques par les moments empiriques :
+\[ \hat{\sigma}_{MM}^2 = \frac{1}{n} \sum X_i^2 - (\bar{X})^2 \]
+
+\paragraph{Consistance :}
+D'après la LGN :
+\begin{itemize}
+    \item $\bar{X} \xrightarrow{P} E[X]$
+    \item $\frac{1}{n} \sum X_i^2 \xrightarrow{P} E[X^2]$
+\end{itemize}
+Ainsi, le couple des moments empiriques converge :
+\[ \begin{pmatrix} \bar{X} \\ \frac{1}{n} \sum X_i^2 \end{pmatrix} \xrightarrow{P} \begin{pmatrix} E[X] \\ E[X^2] \end{pmatrix} \]
+En utilisant le LAC avec $g(x, y) = y - x^2$ (qui est continue de $\mathbb{R}^2 \to \mathbb{R}$), on en déduit que :
+\[ \hat{\sigma}_n^2 \xrightarrow{P} E[X^2] - (E[X])^2 = \text{Var}(X) \]
+L'estimateur $\hat{\sigma}_n^2$ est donc consistant pour la variance $\sigma^2$.
+
+\begin{remark}
+Exercice : Calculer le biais et le risque de $\hat{\sigma}_n^2$.
+\end{remark}
+
+\section{Méthode du Maximum de Vraisemblance (MV)}
+
+\begin{definition}[Modèle dominé]
+Un modèle $(P_\theta)_{\theta \in \Theta}$ est dit dominé s'il existe une mesure $\nu$ (positive $\sigma$-finie) telle que pour tout $\theta$, $P_\theta$ admette une densité $f_\theta$ par rapport à $\nu$.
+\end{definition}
+
+\paragraph{En pratique :}
+\begin{itemize}
+    \item Si l'espace $E$ est au plus dénombrable, $\nu$ est la \textbf{mesure de comptage}. Si $\exists \{a_1, a_2, \dots\}$ tel que $\sum_{k \geq 1} P_\theta(X_i = a_k) = 1$, alors $\nu = \sum \delta_{a_k}$ avec $\delta_a(\{a\}) = 1$ (mesure de Dirac). On écrira $f_\theta(x) = P_\theta(X_i = x)$.
+    \item Si $E = \mathbb{R}^p$, alors $f_\theta$ est la densité usuelle (par rapport à la mesure de Lebesgue).
+\end{itemize}
+
+\begin{definition}[Vraisemblance]
+On appelle \textbf{vraisemblance} de l'échantillon $(X_1, \dots, X_n)$ (Likelihood) la fonction :
+\[ \theta \to L_n(\theta) = \prod_{i=1}^n f_\theta(X_i) \]
+C'est une variable aléatoire car elle dépend de l'échantillon.
+\end{definition}
+
+\begin{definition}[Estimateur du Maximum de Vraisemblance]
+Un estimateur du maximum de vraisemblance $\hat{\theta}_{MV}$ est défini tel que :
+\[ \forall \theta \in \Theta, \quad L_n(\theta) \leq L_n(\hat{\theta}_{MV}) \]
+\end{definition}
+
+On travaille souvent avec la \textbf{log-vraisemblance} car elle transforme le produit en somme, ce qui facilite les calculs :
+\[ \log L_n(\theta) = \sum_{i=1}^n \ln f_\theta(X_i) \]
+Puisque le logarithme est une fonction croissante, maximiser $L_n$ revient à maximiser $\log L_n$ :
+\[ \log L_n(\hat{\theta}) = \sup_{\theta \in \Theta} \log L_n(\theta) \]
+
+\begin{verbatim}
+#save_to: likelihood_plot.png
+import matplotlib.pyplot as plt
+import matplotlib.patches as patches
+import numpy as np
+
+x = np.linspace(-5, 5, 400)
+# Define three likelihood-like functions
+def f(x, mu, sigma):
+    return (1/(sigma * np.sqrt(2 * np.pi))) * np.exp(-0.5 * ((x - mu)/sigma)**2)
+
+y1 = f(x, -2, 0.8)
+y2 = f(x, 1, 1.5)
+y3 = f(x, 2.5, 0.6)
+
+plt.figure(figsize=(8, 5))
+plt.plot(x, y1, 'r-', label=r'$\theta_1$')
+plt.plot(x, y2, 'b-', label=r'$\theta_2$')
+plt.plot(x, y3, 'm-', label=r'$\theta_3$')
+
+# Drawing dashed lines to max
+plt.axvline(x=-2, color='orange', linestyle='--')
+plt.axvline(x=2.5, color='blue', linestyle='--')
+
+plt.text(-2.5, 0.45, r'$\theta_1$', color='red', fontsize=12)
+plt.text(3, 0.35, r'$\theta_2$', color='blue', fontsize=12)
+plt.text(2.6, 0.6, r'$\theta_3$', color='magenta', fontsize=12)
+
+plt.annotate(r'$\hat{\theta} = \theta_1$', xy=(-2, 0), xytext=(-2.5, -0.05), color='orange', fontsize=12)
+plt.annotate(r'$\hat{\theta} = \theta_3$', xy=(2.5, 0), xytext=(2.2, -0.05), color='blue', fontsize=12)
+
+plt.axhline(0, color='black', linewidth=1)
+plt.axvline(0, color='black', linewidth=1)
+plt.title("Illustration des fonctions de vraisemblance pour différents paramètres")
+plt.xlabel("Observations x")
+plt.ylabel(r"$f_{\theta}(x)$")
+plt.grid(alpha=0.3)
+plt.savefig('likelihood_plot.png')
+\end{verbatim}
+
+\begin{figure}[h]
+\centering
+\includegraphics[ max width=\textwidth,
+max height=0.4\textheight,
+keepaspectratio]{likelihood_plot.png}
+\caption{Comparaison des vraisemblances pour différentes valeurs de $\theta$. L'estimateur du maximum de vraisemblance choisit le paramètre qui maximise la probabilité d'observer les données.}
+\label{fig:likelihood}
+\end{figure}
+
+\section{Mise en œuvre du MV : Exemple de la loi de Bernoulli}
+
+Soit $X_i \sim \text{Ber}(\theta)$, la densité est $f_\theta(x) = \theta^x (1-\theta)^{1-x}$ pour $x \in \{0, 1\}$.
+La vraisemblance est :
+\[ L_n(\theta) = \prod_{i=1}^n \theta^{X_i} (1-\theta)^{1-X_i} = \theta^{\sum X_i} (1-\theta)^{n - \sum X_i} \]
+La log-vraisemblance s'écrit :
+\[ \log L_n(\theta) = \left(\sum X_i\right) \ln \theta + \left(n - \sum X_i\right) \ln (1-\theta) \]
+
+\paragraph{Condition du premier ordre (Point critique) :}
+On dérive par rapport à $\theta$ :
+\[ (\log L_n)'(\theta) = \frac{\sum X_i}{\theta} - \frac{n - \sum X_i}{1 - \theta} \]
+Recherchons le point critique où la dérivée s'annule :
+\begin{align*}
+(\log L_n)'(\theta) = 0 &\iff \frac{\sum X_i}{\theta} = \frac{n - \sum X_i}{1 - \theta} \\
+&\iff (1-\theta) \sum X_i = \theta (n - \sum X_i) \\
+&\iff \sum X_i - \theta \sum X_i = n\theta - \theta \sum X_i \\
+&\iff \sum X_i = n\theta \\
+&\iff \theta = \frac{\sum X_i}{n} = \bar{X}
+\end{align*}
+On peut aussi réécrire la dérivée sous la forme :
+\[ (\log L_n)'(\theta) = \frac{\sum X_i - n\theta}{\theta(1-\theta)} = \frac{n}{\theta(1-\theta)} (\bar{X} - \theta) \]
+La dérivée change de signe en $\bar{X}$ (de positif à négatif), donc on a bien un maximum en $\hat{\theta}_{MV} = \bar{X}$.
+
+\paragraph{Condition du second ordre :}
+Pour confirmer qu'il s'agit d'un maximum global, on vérifie la concavité de la log-vraisemblance en calculant la dérivée seconde :
+\[ (\log L_n)''(\theta) = - \frac{\sum X_i}{\theta^2} - \frac{n - \sum X_i}{(1-\theta)^2} \]
+Puisque $\sum X_i \geq 0$ et $n - \sum X_i \geq 0$, on a $(\log L_n)''(\theta) < 0$ pour tout $\theta \in ]0, 1[$.
+La fonction est donc strictement concave, ce qui garantit que le maximum est unique et global.
+
+\paragraph{Conclusion :}
+Par unicité du point critique et concavité de la fonction, $\hat{\theta} = \bar{X}$ est l'unique Estimateur du Maximum de Vraisemblance (E.M.V.).
+
+\end{document}
