@@ -6,9 +6,7 @@
         {
           "title": "Cours 2",
           "notes": [],
-          "files": [
-            "C:\\Users\\sipan\\Documents\\OneClass\\sync_files\\Algèbre_linéaire_pour_analyse_(MDD_351)\\Cours_2\\CM2.pdf"
-          ],
+          "files": [],
           "images": [],
           "videos": []
         }
@@ -22,9 +20,7 @@
         {
           "title": "Cours 2",
           "notes": [],
-          "files": [
-            "C:\\Users\\sipan\\Documents\\OneClass\\sync_files\\Inférence_statistique_(MDD_353)\\Cours_2\\CM2.pdf"
-          ],
+          "files": [],
           "images": [],
           "videos": []
         }
@@ -49,5 +45,5 @@
       "globalImages": []
     }
   },
-  "exportedAt": "2026-01-15T16:17:27.385377"
+  "exportedAt": "2026-01-15T16:19:30.233973"
 }
