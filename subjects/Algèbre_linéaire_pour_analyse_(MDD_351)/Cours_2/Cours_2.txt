@@ -1,0 +1,164 @@
+\begin{document}
+\sloppy
+
+\title{Résolution des Systèmes Linéaires et Décompositions}
+\maketitle
+
+\section{Introduction aux Systèmes Linéaires}
+
+Le problème fondamental de l'algèbre linéaire numérique consiste à résoudre un système de la forme :
+\[ Ax = b \]
+où $A \in \mathbb{C}^{N \times N}$ est une matrice carrée et $b \in \mathbb{C}^N$ est un vecteur donné.
+
+\subsection{Méthode de Newton pour les systèmes non-linéaires}
+Pour un système d'équations non-linéaires de la forme $F(x) = 0$, où $F: \mathbb{R}^N \to \mathbb{R}^N$, la généralisation de la méthode de Newton s'écrit par la relation de récurrence suivante :
+\begin{equation}
+    x_{n+1} = x_n - F'(x_n)^{-1} F(x_n)
+\end{equation}
+Ici, $F'(x_n)$ représente la matrice Jacobienne de $F$ évaluée en $x_n$.
+
+\section{Conditions d'existence et d'unicité}
+
+Soit $A \in \mathbb{C}^{N \times N}$. L'existence et l'unicité d'une solution pour tout vecteur $b$ ($\exists ! Ax = b, \forall b$) sont garanties par les propriétés équivalentes suivantes :
+\begin{itemize}
+    \item $A$ est bijective.
+    \item $A$ est injective (d'après le théorème du rang, ceci implique la bijectivité en dimension finie).
+    \item $A$ est surjective.
+    \item $\det A \neq 0$.
+    \item $0$ n'est pas une valeur propre (v.p.) de $A$.
+\end{itemize}
+
+\subsection{Cas des matrices non-inversibles}
+Si $A$ est une matrice carrée non-inversible, la solution n'est pas unique. Une solution existe si et seulement si $b$ appartient à l'image de $A$ :
+\begin{equation}
+    \exists \text{ sol} \iff b \in \text{Im } A = \text{Vect}(A_1, \dots, A_n)
+\end{equation}
+où $A_1, \dots, A_n$ sont les colonnes de la matrice $A$.
+
+\begin{example}
+Considérons le système suivant :
+\[ 
+\begin{cases} 
+2x + 4y = \alpha \\
+4x + 8y = \beta 
+\end{cases} 
+\]
+L'image de la matrice est donnée par $\text{Im } A = \left\{ \begin{pmatrix} \alpha \\ \beta \end{pmatrix} \text{ tq } 2\alpha = \beta \right\}$. Cela correspond au vecteur orthogonal $\begin{pmatrix} 2 \\ -1 \end{pmatrix}^\perp$.
+\end{example}
+
+\section{Propriétés des Espaces Fondamentaux}
+
+\begin{proposition}
+Pour toute matrice $A \in \mathbb{C}^{N \times M}$, nous avons les décompositions en sommes directes orthogonales suivantes :
+\begin{enumerate}
+    \item $\mathbb{C}^N = \text{Im } A \oplus \text{Ker}(A^*)$
+    \item $\mathbb{C}^M = \text{Im } A^* \oplus \text{Ker}(A)$
+\end{enumerate}
+\end{proposition}
+
+\begin{proof}
+Montrons que $\text{Ker } A = (\text{Im } A^*)^\perp$.
+
+\textbf{1. Montrons que $\text{Ker } A \subset (\text{Im } A^*)^\perp$ :}
+Soit $x \in \text{Ker } A$, donc $Ax = 0$. Soit $y \in \text{Im } A^*$, il existe alors un vecteur $z$ tel que $y = A^* z$.
+Calculons le produit scalaire :
+\[ \langle x, y \rangle = \langle x, A^* z \rangle = \langle Ax, z \rangle = \langle 0, z \rangle = 0 \]
+Ainsi, $x$ est orthogonal à tout élément de $\text{Im } A^*$.
+
+\textbf{2. Montrons que $(\text{Im } A^*)^\perp \subset \text{Ker } A$ :}
+Soit $x \in (\text{Im } A^*)^\perp$. Par définition, pour tout $y \in \text{Im } A^*$, $\langle x, y \rangle = 0$.
+Puisque tout $y$ s'écrit $A^* z$, on a :
+\[ \forall z, \langle x, A^* z \rangle = 0 \iff \forall z, \langle Ax, z \rangle = 0 \]
+Cela implique nécessairement que $Ax = 0$, donc $x \in \text{Ker } A$.
+\end{proof}
+
+Note : Si $A^T y = 0$, cela est équivalent à $y^T A = 0$.
+
+\section{Méthodes de Résolution Directe}
+
+\subsection{Pivot de Gauss}
+Le pivot de Gauss permet de transformer un système complexe en un système triangulaire supérieur.
+\begin{example}
+Soit le système :
+\[
+\begin{pmatrix}
+1 & 2 & 3 \\
+4 & 5 & 6 \\
+7 & 8 & 10
+\end{pmatrix}
+\begin{pmatrix} x \\ y \\ z \end{pmatrix} = 
+\begin{pmatrix} 1 \\ 2 \\ 3 \end{pmatrix}
+\]
+Les opérations élémentaires sur les lignes sont :
+\begin{itemize}
+    \item $L_2 \leftarrow L_2 - 4L_1$
+    \item $L_3 \leftarrow L_3 - 7L_1$
+\end{itemize}
+On obtient une structure de la forme :
+\[
+\begin{pmatrix}
+1 & 2 & 3 \\
+0 & \dots & \dots \\
+0 & \dots & \dots
+\end{pmatrix}
+\rightarrow
+\begin{pmatrix}
+1 & 2 & 3 \\
+0 & \times & \times \\
+0 & 0 & \times
+\end{pmatrix}
+\]
+La complexité algorithmique de cette méthode est en $O(N^3)$.
+\end{example}
+
+\subsection{Décomposition LU}
+L'objectif est d'écrire $A = LU$ où $L$ est triangulaire inférieure (Lower) et $U$ est triangulaire supérieure (Upper).
+Le passage de $A$ à $U$ se fait par des multiplications à gauche par des matrices élémentaires $B_n$ (matrices de type triangulaire inférieur) :
+\[ U = B_n B_{n-1} \dots B_1 A \]
+En posant $L = B_1^{-1} B_2^{-1} \dots B_n^{-1}$, on obtient $A = LU$.
+En pratique, pour des raisons de stabilité numérique, on utilise une matrice de permutation $P$ pour obtenir la décomposition $PA = LU$.
+Le système $Ax=b$ devient $LUx = Pb$. On résout alors :
+\begin{enumerate}
+    \item $Ly = Pb$ (descente)
+    \item $Ux = y$ (remontée)
+\end{enumerate}
+
+\subsection{Décomposition QR}
+Toute matrice $A \in \mathbb{C}^{N \times M}$ (avec $M \leq N$) peut se décomposer sous la forme $A = QR$, où $Q$ est une matrice orthogonale ($Q^* Q = I_M$) et $R$ est triangulaire supérieure.
+Le procédé de Gram-Schmidt permet de construire les colonnes $q_i$ de $Q$ à partir des colonnes $u_i$ de $A$ :
+\begin{align*}
+    q_1 &= \frac{u_1}{\|u_1\|} \\
+    q_2 &= \frac{u_2 - \langle q_1, u_2 \rangle q_1}{\|u_2 - \langle q_1, u_2 \rangle q_1\|}
+\end{align*}
+On en déduit que $Q = A R^{-1}$.
+
+\subsection{Décomposition de Cholesky}
+Pour une matrice $A$ symétrique définie positive, il existe une décomposition unique de la forme :
+\[ A = L L^T \]
+où $L$ est une matrice triangulaire inférieure à coefficients diagonaux strictement positifs.
+
+\section{Problèmes de Moindres Carrés}
+
+Dans le contexte d'une régression linéaire $y = \alpha X + \beta$, on cherche $(\alpha, \beta) \in \mathbb{R}^2$ qui minimise la somme des carrés des résidus :
+\[ \min \sum_{i=1}^N |y_i - (\alpha x_i + \beta)|^2 \]
+
+\subsection{Formulation Matricielle}
+Soit $e_i = y_i - (\alpha x_i + \beta)$ le résidu pour chaque point. On cherche à minimiser $\|e\|^2 = \langle e, e \rangle$.
+En posant $x = \begin{pmatrix} \alpha \\ \beta \end{pmatrix}$ et $A = \begin{pmatrix} x_1 & 1 \\ \vdots & \vdots \\ x_N & 1 \end{pmatrix}$, le problème devient :
+\[ \min_{x \in \mathbb{R}^M} \|Ax - b\|^2 \]
+
+\subsection{Équations Normales}
+Pour $A \in \mathbb{R}^{N \times M}$ avec $N \gg M$, développons la norme :
+\begin{align*}
+    \|Ax - b\|^2 &= \langle Ax - b, Ax - b \rangle \\
+    &= (Ax)^T (Ax) - b^T Ax - (Ax)^T b + \|b\|^2 \\
+    &= x^T A^T A x - 2(A^T b)^T x + \|b\|^2
+\end{align*}
+Pour minimiser cette expression, on annule le gradient par rapport à $x$ :
+\[ 2 A^T A x - 2 A^T b = 0 \]
+Ce qui nous donne les \textbf{formes normales} :
+\begin{equation}
+    A^T A x = A^T b
+\end{equation}
+
+\end{document}
