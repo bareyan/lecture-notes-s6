@@ -1,0 +1,53 @@
+{
+  "subjects": {
+    "Algèbre linéaire pour analyse (MDD 351)": {
+      "name": "Algèbre linéaire pour analyse (MDD 351)",
+      "contentGroups": [
+        {
+          "title": "Cours 2",
+          "notes": [],
+          "files": [
+            "C:\\Users\\sipan\\Documents\\OneClass\\sync_files\\Algèbre_linéaire_pour_analyse_(MDD_351)\\Cours_2\\CM2.pdf"
+          ],
+          "images": [],
+          "videos": []
+        }
+      ],
+      "globalFiles": [],
+      "globalImages": []
+    },
+    "Inférence statistique (MDD 353)": {
+      "name": "Inférence statistique (MDD 353)",
+      "contentGroups": [
+        {
+          "title": "Cours 2",
+          "notes": [],
+          "files": [
+            "C:\\Users\\sipan\\Documents\\OneClass\\sync_files\\Inférence_statistique_(MDD_353)\\Cours_2\\CM2.pdf"
+          ],
+          "images": [],
+          "videos": []
+        }
+      ],
+      "globalFiles": [],
+      "globalImages": []
+    },
+    "Travaux doc et articles": {
+      "name": "Travaux doc et articles",
+      "contentGroups": [
+        {
+          "title": "test",
+          "notes": [],
+          "files": [
+            "C:\\Users\\sipan\\Documents\\OneClass\\sync_files\\Travaux_doc_et_articles\\test\\Cours 1.pdf"
+          ],
+          "images": [],
+          "videos": []
+        }
+      ],
+      "globalFiles": [],
+      "globalImages": []
+    }
+  },
+  "exportedAt": "2026-01-15T15:19:07.991954"
+}
