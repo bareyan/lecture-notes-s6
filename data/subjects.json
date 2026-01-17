@@ -59,20 +59,14 @@
           "files": [
             "/data/user/0/com.sipanbareyan.oneclass/app_flutter/OneClass/sync_files/O&A/TD0/Oa.pdf"
           ],
-          "images": [
-            "/data/user/0/com.sipanbareyan.oneclass/app_flutter/OneClass/sync_files/O&A/TD0/50.jpg",
-            "/data/user/0/com.sipanbareyan.oneclass/app_flutter/OneClass/sync_files/O&A/TD0/49.jpg",
-            "/data/user/0/com.sipanbareyan.oneclass/app_flutter/OneClass/sync_files/O&A/TD0/48.jpg"
-          ],
+          "images": [],
           "videos": []
         },
         {
           "title": "test",
           "notes": [],
           "files": [],
-          "images": [
-            "/data/user/0/com.sipanbareyan.oneclass/app_flutter/OneClass/sync_files/O&A/test/1000012245.jpg"
-          ],
+          "images": [],
           "videos": []
         }
       ],
@@ -94,5 +88,5 @@
       "globalImages": []
     }
   },
-  "exportedAt": "2026-01-17T10:36:49.588153"
+  "exportedAt": "2026-01-17T11:01:43.268537"
 }
