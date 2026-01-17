@@ -1,0 +1,246 @@
+\begin{document}
+\sloppy
+
+\title{Modélisation de la Dynamique des Populations : Modèles Discrets et Continus}
+\maketitle
+
+\section{Modèles Discrets}
+
+\subsection{Introduction aux modèles discrètes}
+
+On désigne par $N(t)$ la population d'individus à l'instant $t$. L'évolution de la population est régie par l'équation fondamentale du modèle discret :
+
+\[ N(t + \Delta t) - N(t) = n - m + i - e \]
+
+Où :
+\begin{itemize}
+    \item $N(t + \Delta t) - N(t)$ représente la \textbf{variation de la population}.
+    \item $n$ est le nombre de naissances liées.
+    \item $m$ est le nombre de décès liés.
+    \item $i$ est l'immigration.
+    \item $e$ est l'émigration.
+    \item Le terme $(i - e)$ correspond au \textbf{solde de migration}.
+\end{itemize}
+
+\subsection{Modèle de croissance géométrique}
+
+\begin{definition}[Hypothèses du modèle]
+Le modèle de croissance géométrique repose sur les hypothèses suivantes :
+\begin{itemize}
+    \item Le solde de migration est nul : $i - e = 0$.
+    \item Le nombre de naissances est proportionnel à la taille de la population : $n = \lambda \Delta t N(t)$, où $\lambda$ est le \textbf{taux de natalité}.
+    \item De même, le nombre de décès est proportionnel à la taille de la population : $m = \mu \Delta t N(t)$, où $\mu$ est le \textbf{taux de mortalité}.
+\end{itemize}
+\end{definition}
+
+\textbf{Modèle :}
+On pose $N_n = N(t_n)$ la taille de la population à l'instant $t_n$. L'équation devient :
+\[ N_{n+1} - N_n = \lambda \Delta t N_n - \mu \Delta t N_n \]
+En posant $r = \lambda - \mu$ (le \textbf{taux de croissance}), nous obtenons :
+\[ N_{n+1} = (1 + r \Delta t) N_n \]
+Avec $N_0$ donné comme la taille initiale de la population.
+
+\begin{solution}
+La solution de cette relation de récurrence est :
+\[ N_n = (1 + r \Delta t)^n N_0, \quad n \in \mathbb{N} \]
+\end{solution}
+
+\subsubsection{Visualisation (pour $\Delta t$ fixé)}
+
+\begin{verbatim}
+#save_to: croissance_geometrique.png
+import matplotlib.pyplot as plt
+import numpy as np
+
+t = np.arange(0, 11, 1)
+N0 = 10
+r_pos = 0.2
+r_zero = 0
+r_neg = -0.1
+dt = 1
+
+fig, axs = plt.subplots(1, 3, figsize=(15, 5))
+
+# r > 0
+axs[0].plot(t, N0 * (1 + r_pos * dt)**t, 'o--', color='black')
+axs[0].set_title(r'$r > 0$ : Natalité supérieure à mortalité')
+axs[0].set_ylabel('$N_n$')
+axs[0].set_xlabel('$n$')
+axs[0].set_ylim(0, 70)
+
+# r = 0
+axs[1].plot(t, N0 * (1 + r_zero * dt)**t, 'o--', color='black')
+axs[1].set_title(r'$r = 0$ : Natalité égale à la mortalité')
+axs[1].set_xlabel('$n$')
+axs[1].set_ylim(0, 20)
+
+# r < 0
+axs[2].plot(t, N0 * (1 + r_neg * dt)**t, 'o--', color='black')
+axs[2].set_title(r'$r < 0$ : Natalité inférieure à la mortalité')
+axs[2].set_xlabel('$n$')
+axs[2].set_ylim(0, 15)
+
+plt.tight_layout()
+plt.savefig('croissance_geometrique.png')
+\end{verbatim}
+
+\begin{figure}[H]
+\centering
+\includegraphics[max width=\textwidth, max height=0.4\textheight, keepaspectratio]{croissance_geometrique.png}
+\caption{Évolution de la population selon le taux de croissance $r$}
+\label{fig:geo_growth}
+\end{figure}
+
+\subsubsection{Propriétés et Inconvénients}
+
+\textbf{Propriétés :}
+\begin{itemize}
+    \item Lorsque $\Delta t \to 0$, la population semble tendre vers une courbe $N(t) = N_0 e^{rt}$, solution de l'équation différentielle :
+    \[ \begin{cases} N'(t) = r N(t) \\ N(0) = N_0 \end{cases} \]
+    \item Si $r > 0$, la population croît indéfiniment.
+    \item Si $r < 0$, il y a extinction de l'espèce.
+\end{itemize}
+
+\textbf{Inconvénients :}
+\begin{enumerate}
+    \item[i)] Une croissance infinie n'est pas réaliste dans un environnement fini.
+    \item[ii)] Pour être rigoureux, on devrait écrire $E(r N_n)$ (partie entière) car le nombre d'individus doit être entier.
+\end{enumerate}
+
+\section{Modèles Continus}
+
+\subsection{Motivation et Passage au Continu}
+
+L'observation qui consiste à prendre $\Delta t$ proche de $0$ apporte beaucoup plus d'information. En reprenant le modèle de croissance géométrique :
+\[ N(t + \Delta t) - N(t) = \lambda \Delta t N(t) - \mu \Delta t N(t) \]
+\[ \Rightarrow \frac{N(t + \Delta t) - N(t)}{\Delta t} = \lambda N(t) - \mu N(t) \]
+En faisant tendre $\Delta t \to 0$, on obtient l'équation différentielle :
+\[ N'(t) = \lambda N(t) - \mu N(t) \]
+
+D'où l'équation générale des modèles continus :
+\[ \underbrace{N'(t)}_{\text{Vitesse de variation}} = \underbrace{n(t)}_{\text{vitesse de naissance}} - \underbrace{m(t)}_{\text{vitesse de décès}} + \underbrace{i(t)}_{\text{vitesse d'immigration}} - \underbrace{e(t)}_{\text{vitesse d'émigration}} \]
+
+\subsection{Modèle de Malthus}
+
+\begin{definition}[Modèle de Malthus]
+Sous les hypothèses suivantes :
+\begin{itemize}
+    \item Solde migratoire nul : $i(t) - e(t) = 0$.
+    \item Vitesse de naissance proportionnelle à la population : $n(t) = \lambda N(t)$.
+    \item Vitesse de décès proportionnelle à la population : $m(t) = \mu N(t)$.
+\end{itemize}
+Le modèle s'écrit :
+\[ \begin{cases} N'(t) = (\lambda - \mu) N(t), \quad t > 0 \\ N(0) = N_0 \end{cases} \]
+\end{definition}
+
+\begin{solution}
+La solution exacte est :
+\[ N(t) = N_0 e^{(\lambda - \mu)t} \]
+\end{solution}
+
+\textbf{Propriétés :}
+\begin{itemize}
+    \item Il peut être vu comme la limite du modèle de croissance géométrique.
+    \item Lorsque $r = \lambda - \mu > 0$, la croissance est proportionnelle.
+    \item Lorsque $r = \lambda - \mu = 0$, la population n'évolue pas.
+    \item Lorsque $r = \lambda - \mu < 0$, la population tend vers 0.
+\end{itemize}
+
+\textbf{Inconvénients :}
+La croissance exponentielle n'est pas réaliste car elle ne prend pas en compte :
+\begin{itemize}
+    \item La limitation des ressources.
+    \item L'interaction avec l'environnement.
+\end{itemize}
+
+\subsection{Modèle de Verhulst}
+
+Le modèle de Verhulst corrige le modèle de Malthus en prenant en compte la limitation des ressources. L'idée est de limiter la croissance à un seuil $K$ appelé \textbf{capacité biotique}.
+
+\begin{definition}[Hypothèses de Verhulst]
+\begin{itemize}
+    \item Solde de migration nul.
+    \item Le taux de natalité est une fonction affine décroissante de la population : $\lambda \approx \lambda_1 (1 - \frac{N(t)}{K})$.
+    \item Le taux de mortalité est une fonction affine croissante de la population : $\mu \approx \mu_1 (1 - \frac{N(t)}{K})$.
+\end{itemize}
+Le modèle complet s'écrit alors :
+\[ \begin{cases} N'(t) = r N(t) \left( 1 - \frac{N(t)}{K} \right) \\ N(0) = N_0 \end{cases} \]
+\end{definition}
+
+\begin{solution}
+La solution de cette équation logistique est :
+\[ N(t) = \frac{K}{1 + \left( \frac{K}{N_0} - 1 \right) e^{-rt}}, \quad t > 0 \]
+\end{solution}
+
+\subsubsection{Visualisation et Propriétés}
+
+\begin{verbatim}
+#save_to: verhulst_model.png
+import matplotlib.pyplot as plt
+import numpy as np
+
+def sol_verhulst(t, N0, K, r):
+    return K / (1 + (K/N0 - 1) * np.exp(-r*t))
+
+t = np.linspace(0, 10, 100)
+K = 100
+r = 1
+
+plt.figure(figsize=(10, 6))
+# Cas N0 < K
+plt.plot(t, sol_verhulst(t, 20, K, r), label='$N_0 < K$', color='black')
+# Cas N0 > K
+plt.plot(t, sol_verhulst(t, 150, K, r), '--', label='$N_0 > K$', color='black')
+
+plt.axhline(y=K, color='gray', linestyle=':', label='Capacité K')
+plt.title('Modèle de Verhulst : Convergence vers la capacité biotique')
+plt.xlabel('Temps (t)')
+plt.ylabel('Population N(t)')
+plt.legend()
+plt.savefig('verhulst_model.png')
+\end{verbatim}
+
+\begin{figure}[H]
+\centering
+\includegraphics[max width=\textwidth, max height=0.4\textheight, keepaspectratio]{verhulst_model.png}
+\caption{Comportement de la population dans le modèle de Verhulst}
+\label{fig:verhulst}
+\end{figure}
+
+\textbf{Propriétés pour $r > 0$ :}
+\begin{itemize}
+    \item Si $N_0 = 0$ ou $N_0 = K$, alors $N(t) = N_0$ pour tout $t > 0$ (points d'équilibre).
+    \item Si $0 < N_0 < K$, la population $N$ croît ($N \nearrow$).
+    \item Si $N_0 > K$, la population $N$ décroît ($N \searrow$).
+    \item Dans tous les cas où $N_0 > 0$, la population possède une limite :
+    \[ \lim_{t \to \infty} N(t) = K \]
+\end{itemize}
+
+\section{Modèle de croissance logistique (Discret)}
+
+Il s'agit d'un modèle discret correspondant à la dynamique de Verhulst. On suppose $\Delta t = 1$.
+
+\textbf{Hypothèses :}
+\begin{itemize}
+    \item $i - e = 0$
+    \item Le terme $(n - m)$ est une fonction affine de la population : $(n - m) = r N(t) (1 - \frac{N(t)}{K})$.
+\end{itemize}
+
+\textbf{Modèle :}
+En posant $N_n = N(t_n)$, on a :
+\[ \begin{cases} N_{n+1} - N_n = r N_n \left( 1 - \frac{N_n}{K} \right) \\ N_0 \text{ donné} \end{cases} \]
+
+\textbf{Propriétés (À vérifier numériquement) :}
+Le comportement de la suite dépend fortement de la valeur de $r$ :
+\begin{itemize}
+    \item Si $r < 2$ : la suite converge vers $K$.
+    \item Si $2 < r < 2.449$ : la suite converge vers un cycle (oscillation entre deux valeurs).
+    \item Si $2.449 < r < 2.57$ : la suite est encore un cycle, mais plus complexe.
+    \item Si $r > 2.57$ : la suite devient chaotique.
+\end{itemize}
+
+\begin{remark}
+Exercice à réaliser pour tester ces différents régimes.
+\end{remark}
+
+\end{document}
