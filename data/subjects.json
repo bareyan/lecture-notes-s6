@@ -59,11 +59,7 @@
           "files": [
             "/data/user/0/com.sipanbareyan.oneclass/app_flutter/OneClass/sync_files/O&A/TD0/Oa.pdf"
           ],
-          "images": [
-            "/data/user/0/com.sipanbareyan.oneclass/cache/35e3fa36-e1a5-4503-8fd3-fd85ef5e8bc4/50.jpg",
-            "/data/user/0/com.sipanbareyan.oneclass/cache/3c8daa84-1942-43c4-a75c-08405fa287ce/49.jpg",
-            "/data/user/0/com.sipanbareyan.oneclass/cache/96a37e60-b433-4619-9dc2-e86fe84740f8/48.jpg"
-          ],
+          "images": [],
           "videos": []
         }
       ],
@@ -85,5 +81,5 @@
       "globalImages": []
     }
   },
-  "exportedAt": "2026-01-17T11:02:12.813003"
+  "exportedAt": "2026-01-17T11:04:18.619056"
 }
