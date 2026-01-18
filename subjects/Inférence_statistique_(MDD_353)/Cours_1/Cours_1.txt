@@ -1,0 +1,200 @@
+\begin{document}
+\sloppy
+
+\title{Cours 1 - Introduction aux Modèles Statistiques, Estimateurs et Risque}
+\maketitle
+
+\section*{Évaluation}
+\begin{itemize}
+    \item $0.4 \times \text{CC} + 0.6 \times \text{Examen}$
+    \item Le CC est composé de : $80\%$ pour le partiel et $20\%$ pour l'interrogation du 26/01.
+\end{itemize}
+
+\section{Modèle Statistique}
+
+\begin{definition}
+Un modèle statistique est un espace de probabilité $(\Omega, \mathcal{A}, \mathcal{P})$ où $\mathcal{P}$ est une famille de lois de probabilité $\{P_\theta ; \theta \in \Theta\}$.
+\begin{itemize}
+    \item Si $\exists p \in \mathbb{N}^*, \Theta \subset \mathbb{R}^p$ : le modèle est dit \textbf{paramétrique}.
+    \item Sinon : le modèle est dit \textbf{non paramétrique}.
+\end{itemize}
+\end{definition}
+
+\begin{example}
+Exemples de familles :
+\begin{itemize}
+    \item $\mathcal{P} = \{ \mathcal{P}(\lambda) ; \lambda > 0 \}$ les lois de Poisson.
+    \item $\mathcal{P} = \{ \text{loi de probas} \} = \{ P ; P \text{ dont la densité admet une dérivée seconde bornée} \}$.
+\end{itemize}
+\end{example}
+
+\begin{definition}
+Une \textbf{observation} est une variable aléatoire (v.a.) dont la loi $\in \{P_\theta ; \theta \in \Theta\}$.
+Notre observation aura une structure de $n$-échantillon $X_1, \dots, X_n$ des v.a. indépendantes (réelles) identiquement distribuées (i.i.d.), de loi commune $\in \{P_\theta ; \theta \in \Theta\}$.
+\end{definition}
+
+\begin{remark}
+On note $(X_1, \dots, X_n)$ de loi $P_\theta^{\otimes n}$. L'échantillon contient toute l'information sur $P_\theta$, donc sur $\theta$.
+\end{remark}
+
+\begin{definition}
+Un modèle est dit \textbf{identifiable} si et seulement si l'application $\theta \longrightarrow P_\theta$ est injective.
+\end{definition}
+
+\begin{remark}
+Il ne faut pas confondre :
+\begin{itemize}
+    \item $X_i$ : la variable aléatoire.
+    \item $x_i$ : la donnée, qui est une réalisation de $X_i$.
+\end{itemize}
+\end{remark}
+
+\section{Estimateurs}
+
+\textbf{Hypothèse :} On observe $X_1, \dots, X_n$ i.i.d. de loi commune $\in \{P_\theta, \theta \in \Theta \subset \mathbb{R}^p\}$, dans un modèle paramétrique identifiable. Il existe un $\theta^*$ inconnu tel que $P_{X_1} = P_{\theta^*}$.
+
+\begin{definition}[Estimateur]
+Un estimateur de $\theta$ est une fonction de l'échantillon $h(X_1, \dots, X_n)$, mesurable et indépendante de $\theta$. Il doit être calculable à partir des données.
+\end{definition}
+
+\textbf{Notation :} $\hat{\theta} = \hat{\theta}_n = h(X_1, \dots, X_n)$. On note que $\hat{\theta}_n$ est une variable aléatoire.
+
+\begin{example}
+$\hat{\theta} = 0$, $\hat{\theta} = X_1 - X_3$, \dots
+\end{example}
+
+Deux questions fondamentales se posent :
+\begin{enumerate}
+    \item Comment définir un bon estimateur ?
+    \item Comment construire un bon estimateur ?
+\end{enumerate}
+
+\section{Risque quadratique}
+
+\textbf{Idée :} En moyenne, $\hat{\theta}$ doit être proche de $\theta$. On s'intéresse à l'écart $(\hat{\theta} - \theta)$.
+
+\begin{definition}[Biais de $\hat{\theta}$]
+Le biais est défini par :
+\[ B(\hat{\theta}, \theta) = \mathbb{E}[\hat{\theta}] - \theta \]
+On dit que $\hat{\theta}$ est \textbf{sans biais} si $B(\hat{\theta}, \theta) = 0$.
+\end{definition}
+
+\begin{definition}[Risque quadratique]
+Le risque quadratique, ou MSE (\textit{mean squared error}), est défini par :
+\[ R(\hat{\theta}, \theta) = \mathbb{E}\left[(\hat{\theta} - \theta)^2\right] \]
+On dit que $\hat{\theta}_1$ est meilleur que $\hat{\theta}_2$ si $R(\hat{\theta}_1, \theta) \leq R(\hat{\theta}_2, \theta)$.
+\end{definition}
+
+\begin{verbatim}
+#save_to: risk_comparison.png
+import matplotlib.pyplot as plt
+import matplotlib.patches as patches
+import numpy as np
+from scipy.stats import norm
+
+x = np.linspace(-5, 5, 1000)
+theta = 0
+y1 = norm.pdf(x, theta, 0.6)
+y2 = norm.pdf(x, theta, 1.5)
+
+plt.figure(figsize=(8, 5))
+plt.plot(x, y1, label=r'$\hat{\theta}_1$ (Risque plus faible)', color='green')
+plt.plot(x, y2, label=r'$\hat{\theta}_2$ (Risque plus élevé)', color='red', linestyle='--')
+plt.axvline(x=theta, color='black', label=r'$\theta$ (Cible)')
+plt.title('Comparaison de deux estimateurs')
+plt.xlabel('Valeurs de l\'estimateur')
+plt.ylabel('Densité de probabilité')
+plt.legend()
+plt.savefig('risk_comparison.png')
+\end{verbatim}
+
+\begin{figure}[h]
+\centering
+\includegraphics[ max width=\textwidth,
+max height=0.4\textheight,
+keepaspectratio]{risk_comparison.png}
+\caption{Illustration de la précision de deux estimateurs. L'estimateur $\hat{\theta}_1$ est plus concentré autour de la valeur réelle $\theta$.}
+\label{fig:risk_comparison}
+\end{figure}
+
+\begin{example}[Modèle de Poisson]
+Soient $X_1, \dots, X_n$ i.i.d. de loi $P_\theta$ de Poisson, $\theta > 0$.
+On cherche à estimer $\theta$. On sait que $\theta = \mathbb{E}[X_1]$. Un estimateur naturel est la moyenne empirique :
+\[ \hat{\theta}_n = \bar{X} = \frac{1}{n} \sum_{i=1}^n X_i \]
+
+Calcul du biais :
+\begin{align*}
+B(\hat{\theta}, \theta) &= \mathbb{E}\left[ \frac{1}{n} \sum_{i=1}^n X_i \right] - \theta \\
+&\text{(par linéarité)} \\
+&= \frac{1}{n} \sum_{i=1}^n \mathbb{E}[X_i] - \theta \\
+&\text{(v.a. i.i.d.)} \\
+&= \frac{1}{n} \cdot n \mathbb{E}[X_1] - \theta \\
+&= \mathbb{E}[X_1] - \theta = \theta - \theta = 0
+\end{align*}
+Ainsi, $\mathbb{E}[\bar{X}] = \theta$, l'estimateur est sans biais.
+
+Calcul du risque quadratique :
+\begin{align*}
+R(\hat{\theta}, \theta) &= \mathbb{E}\left[ (\bar{X} - \theta)^2 \right] = \mathbb{E}\left[ (\bar{X} - \mathbb{E}[\bar{X}])^2 \right] \\
+&= \text{Var}(\bar{X}) \\
+&= \text{Var}\left( \frac{1}{n} \sum X_i \right) \\
+&= \frac{1}{n^2} \text{Var}\left( \sum X_i \right) \\
+&\text{(par indépendance)} \\
+&= \frac{1}{n^2} \sum \text{Var}(X_i) = \frac{1}{n^2} \cdot n \cdot \text{Var}(X_1) = \frac{\text{Var}(X_1)}{n}
+\end{align*}
+Pour une loi de Poisson, $\text{Var}(X_1) = \theta$, donc $R(\hat{\theta}, \theta) = \frac{\theta}{n}$.
+\end{example}
+
+\begin{proposition}[Décomposition biais-variance du risque]
+\[ R(\hat{\theta}, \theta) = (B(\hat{\theta}, \theta))^2 + \text{Var}(\hat{\theta}) \]
+\end{proposition}
+
+\begin{proof}
+\begin{align*}
+R(\hat{\theta}, \theta) &= \mathbb{E}\left[ (\hat{\theta} - \theta)^2 \right] \\
+&\stackrel{\text{def}}{=} \mathbb{E}\left[ (\hat{\theta} - \mathbb{E}[\hat{\theta}] + \mathbb{E}[\hat{\theta}] - \theta)^2 \right] \\
+&= \mathbb{E}\left[ (\hat{\theta} - \mathbb{E}[\hat{\theta}])^2 + (\mathbb{E}[\hat{\theta}] - \theta)^2 + 2(\hat{\theta} - \mathbb{E}[\hat{\theta}])(\mathbb{E}[\hat{\theta}] - \theta) \right] \\
+&= \text{Var}(\hat{\theta}) + (B(\hat{\theta}, \theta))^2 + 2 B(\hat{\theta}, \theta) \underbrace{\mathbb{E}[\hat{\theta} - \mathbb{E}[\hat{\theta}]]}_{=0} \\
+&= \text{Var}(\hat{\theta}) + (B(\hat{\theta}, \theta))^2
+\end{align*}
+\end{proof}
+
+\section{Consistance}
+Il s'agit d'une propriété asymptotique. En statistique, on ne considère généralement que des estimateurs consistants.
+
+\begin{definition}
+Soit $(X_1, \dots, X_n)$ i.i.d. de loi $P_\theta, \theta \in \Theta \subset \mathbb{R}^p$.
+Soit $\hat{\theta}_n = h(X_1, \dots, X_n)$. On considère la suite de v.a. $(\hat{\theta}_n)_{n \geq 1}$.
+$\hat{\theta}_n$ est un estimateur \textbf{consistant} (ou convergent) de $\theta$ si :
+\[ \hat{\theta}_n \xrightarrow[n \to +\infty]{P_\theta} \theta \]
+\end{definition}
+
+\begin{remark}
+$(\hat{\theta}_n)$ est \textbf{fortement consistant} si :
+\[ \hat{\theta}_n \xrightarrow[n \to +\infty]{p.s.} \theta \]
+\end{remark}
+
+\begin{example}[Modèle de Poisson]
+$\theta = \mathbb{E}[X_1]$ ; $\hat{\theta}_n = \bar{X}$.
+\begin{itemize}
+    \item On peut invoquer la Loi des Grands Nombres (LGN) : $\bar{X} \xrightarrow{P} \mathbb{E}[X_1] = \theta$.
+    \item $R(\hat{\theta}, \theta) = \text{Var}(\bar{X}) = \frac{\theta}{n} \xrightarrow[n \to +\infty]{} 0$.
+    \item Par l'inégalité de Bienaymé-Tchebychev (BT) :
+    \[ \forall \epsilon > 0, P(|\hat{\theta} - \theta| > \epsilon) \leq \frac{\mathbb{E}[|\hat{\theta} - \theta|^2]}{\epsilon^2} = \frac{R(\hat{\theta}, \theta)}{\epsilon^2} \xrightarrow[n \to +\infty]{} 0 \]
+\end{itemize}
+\end{example}
+
+\begin{itemize}
+    \item Soient $(X_1, \dots, X_n)$ i.i.d. Poisson($\theta$).
+    \item On veut estimer $\beta = P(X_i = 0) = e^{-\theta}$.
+    \item Par la méthode "plug-in" : $\hat{\beta} = e^{-\hat{\theta}} = e^{-\bar{X}}$.
+    \item $\hat{\beta}$ est consistant pour estimer $\beta$ grâce au lemme suivant.
+\end{itemize}
+
+\begin{lemma}[de l'application continue]
+Si $Z_n \xrightarrow{P} Z$, alors $h(Z_n) \xrightarrow{P} h(Z)$ pour toute fonction $h$ continue.
+\end{lemma}
+
+\textit{fin cours 05/01/26}
+
+\end{document}

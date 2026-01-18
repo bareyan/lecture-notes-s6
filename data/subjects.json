@@ -22,6 +22,15 @@
       "name": "Inférence statistique (MDD 353)",
       "contentGroups": [
         {
+          "title": "Cours 1",
+          "notes": [],
+          "files": [
+            "/data/user/0/com.sipanbareyan.oneclass/app_flutter/OneClass/sync_files/Inférence_statistique_(MDD_353)/Cours_1/Cours - Inférence Statistique.pdf"
+          ],
+          "images": [],
+          "videos": []
+        },
+        {
           "title": "Cours 2",
           "notes": [],
           "files": [
@@ -85,5 +94,5 @@
       "globalImages": []
     }
   },
-  "exportedAt": "2026-01-17T11:05:55.499149"
+  "exportedAt": "2026-01-18T20:13:05.404492"
 }
