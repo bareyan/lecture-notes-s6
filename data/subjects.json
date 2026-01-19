@@ -85,7 +85,9 @@
         {
           "title": "Cours 1",
           "notes": [],
-          "files": [],
+          "files": [
+            "/data/user/0/com.sipanbareyan.oneclass/app_flutter/OneClass/sync_files/Equa_diff_et_résolution_num_(MDD_352)/Cours_1/Cours - Équations Différentielles.pdf"
+          ],
           "images": [],
           "videos": []
         }
@@ -94,5 +96,5 @@
       "globalImages": []
     }
   },
-  "exportedAt": "2026-01-18T20:13:05.404492"
+  "exportedAt": "2026-01-19T16:34:05.115463"
 }

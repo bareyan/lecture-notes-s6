@@ -1,0 +1,218 @@
+\begin{document}
+\sloppy
+
+\title{Cours 1 : Équations Différentielles}
+\maketitle
+
+\section*{Plan du Cours}
+\begin{itemize}
+    \item Ch 1. Exemples, Questions
+    \item Ch 2. Systèmes linéaires d'équations différentielles
+    \item Ch 3. Exemples de méthodes numériques
+    \item Ch 4. Équations non-linéaires
+\end{itemize}
+
+\section{Chapitre 1 : Exemples}
+
+\subsection{I. L'équation différentielle la plus simple}
+
+\subsubsection{1) Vocabulaire}
+
+Pour décrire des questions de dynamique de population, on est amené à chercher des fonctions $y : I \subset \mathbb{R} \to \mathbb{R}$ telles que pour tout $t \in I$ :
+\[ y'(t) = ay(t) \]
+La fonction $y$ représente le nombre d'individus au cours du temps $t \in I$. L'équation dit que la vitesse à laquelle la population change est proportionnelle au nombre d'individus. Le paramètre $a$ représente le \textbf{"taux de natalité"}.
+
+On écrit ce problème sous la forme :
+\begin{equation}
+y' = f(t, y) = ay, \quad \text{avec } f: I \times U \to \mathbb{R} \text{ donnée par } f(t, x) = ax
+\end{equation}
+où $U \subset \mathbb{R}$ et $I \subset \mathbb{R}$ est un intervalle, et $f$ est continue sur $I \times U$.
+
+Résoudre l'équation (1), c'est trouver les couples $(J, y)$ constitués d'un intervalle $J \subset I$ et d'une fonction $y: J \to \mathbb{R}$ tels que :
+\begin{enumerate}
+    \item[i)] $y \in \mathcal{C}^1(J)$
+    \item[ii)] $\forall t \in J, y(t) \in U$
+    \item[iii)] $\forall t \in J, y'(t) = f(t, y(t))$
+\end{enumerate}
+
+On ne s'intéresse qu'aux solutions maximales.
+
+\subsubsection{2) Résolution de (1)}
+
+Soit $a \in \mathbb{R}$. L'équation différentielle sur $I = \mathbb{R}$ donnée par $y' = ay$ (*) a pour solutions les fonctions $(I, t \mapsto Ce^{at})$ avec $C \in \mathbb{R}$.
+
+\begin{proof}
+Supposons que $(J, y)$ soit une solution, avec $J \subset I$ et $y : J \to \mathbb{R}$ une fonction $\mathcal{C}^1$.
+Cette équation (*) s'écrit $y' = f(t, y)$ avec $f : I \times \mathbb{R} \to \mathbb{R}$ définie par $f(t, x) = ax$.
+Il suffit donc de satisfaire iii).
+
+Supposons que $y \in \mathcal{C}^1(\mathbb{R}, \mathbb{R})$. Soit $w : \mathbb{R} \to \mathbb{R}$ définie par $w(t) = e^{-at} y(t)$.
+On a :
+\begin{align*}
+w'(t) &= -ae^{-at}y(t) + e^{-at}y'(t) \\
+&= e^{-at}(y'(t) - ay(t))
+\end{align*}
+Ainsi, $(J, y)$ vérifie iii) si et seulement si $(J, w)$ vérifie : $\forall t \in J, w'(t) = 0$.
+Autrement dit, $(J, y)$ vérifie iii) si et seulement si $w(t) = C$ pour un $C \in \mathbb{R}$ quelconque.
+On obtient donc $(J, y)$ vérifie iii) si et seulement si $(J, y) = (J, t \mapsto Ce^{at})$ pour un $C \in \mathbb{R}$.
+
+Concernant $J$, le raisonnement ci-dessus ne restreint pas son choix. En particulier, on peut prendre $J = I = \mathbb{R}$.
+
+\begin{remark}
+Si $J_1 \subset J$ et $(J, y)$ est une solution de (*), alors $(J_1, y|_{J_1})$ est encore une solution.
+\end{remark}
+
+\begin{verbatim}
+#save_to: solution_maximale.png
+import matplotlib.pyplot as plt
+import matplotlib.patches as patches
+import numpy as np
+
+t = np.linspace(0, 4, 100)
+y = np.exp(0.5 * t) + 1
+
+fig, ax = plt.subplots(figsize=(6, 4))
+ax.plot(t, y, 'b', label='y(t)')
+
+# Intervals
+ax.axhline(0, color='black', linewidth=1)
+ax.axvline(0, color='black', linewidth=1)
+
+# Highlight J and J1
+ax.plot([1, 3.5], [0, 0], color='red', linewidth=4, label='J')
+ax.plot([1.5, 2.5], [0, 0], color='orange', linewidth=4, label='J1')
+
+ax.text(2.2, -0.4, 'J', color='red', fontsize=12)
+ax.text(1.9, -0.8, 'J1', color='orange', fontsize=12)
+
+# Dashed lines to the curve
+ax.vlines([1, 3.5], 0, [np.exp(0.5*1)+1, np.exp(0.5*3.5)+1], linestyles='dashed', color='gray')
+
+ax.set_ylim(-1, 8)
+ax.set_xlim(-0.5, 4.5)
+ax.set_axis_off()
+
+plt.savefig('solution_maximale.png')
+\end{verbatim}
+
+\begin{figure}[h]
+\centering
+\includegraphics[max width=\textwidth, max height=0.4\textheight, keepaspectratio]{solution_maximale.png}
+\caption{Illustration d'une solution sur un intervalle $J$ et sa restriction à $J_1$}
+\label{fig:sol_max}
+\end{figure}
+
+\end{proof}
+
+\begin{definition}
+On dit que $(J, y)$ est une solution maximale de l'équation $y' = f(t, y)$ avec $f : I \times U \to \mathbb{R}$ lorsque $(J, y)$ n'est pas la restriction à $J$ d'une solution $(\tilde{J}, \tilde{y})$ avec $J \subsetneq \tilde{J}$ et $\tilde{y}|_J = y$.
+Autrement dit, $(J, y)$ est maximale s'il est impossible de la prolonger en une solution $(\tilde{J}, \tilde{y})$.
+\end{definition}
+
+Dans le cas de (*) $y' = ay$, on a déterminé toutes les solutions maximales : $(\mathbb{R}, t \mapsto Ce^{at})$.
+
+\subsection{II. Les équations différentielles linéaires d'ordre 1}
+
+\begin{definition}
+Une \textbf{EDL1} est une équation différentielle de la forme :
+\begin{equation}
+y' = a(t)y + b(t)
+\end{equation}
+avec $a, b : I \to \mathbb{R}$ continues.
+On note que (2) s'écrit $y' = f(t, y)$ avec $f: I \times \mathbb{R} \to \mathbb{R}$ donnée par $f(t, x) = a(t)x + b(t)$.
+À $t \in I$ fixé, l'application $x \mapsto f(t, x)$ est affine.
+Lorsque $b = 0$, $x \mapsto f(t, x) = a(t)x$ est linéaire. Dans ce cas, on dit que l'équation différentielle $y' = f(t, y)$ est \textbf{linéaire homogène}.
+\end{definition}
+
+\begin{proposition}
+Les solutions maximales de (2) sont exactement les $(I, t \mapsto Ce^{A(t)} + e^{A(t)} \int_{t_0}^t e^{-A(s)}b(s)ds)$ où $t_0 \in I$ fixé et $A(t) = \int_{t_0}^t a(s)ds$ et $C \in \mathbb{R}$ quelconque.
+\end{proposition}
+
+\begin{proof}
+Soit $(J, y)$ une solution maximale de (2).
+On a $y \in \mathcal{C}^1(J, \mathbb{R})$ et $\forall t \in J, y'(t) = a(t)y(t) + b(t)$.
+Soit $w(t) = e^{-A(t)} y(t)$, où $A(t)$ est une primitive de $a$ sur $J$ : $A(t) = \int_{t_0}^t a(s)ds$ où $t_0 \in J$ fixé.
+On a, pour tout $t \in J$ :
+\begin{align*}
+w'(t) &= -a(t)e^{-A(t)}y(t) + e^{-A(t)}y'(t) \\
+&= e^{-A(t)}(y'(t) - a(t)y(t)) \\
+&= e^{-A(t)}b(t)
+\end{align*}
+Donc il existe $C \in \mathbb{R}$ tel que :
+\[ w(t) = \int_{t_0}^t e^{-A(s)}b(s)ds + C \]
+Ainsi, on a :
+\[ y(t) = e^{A(t)} w(t) = Ce^{A(t)} + e^{A(t)} \int_{t_0}^t e^{-A(s)}b(s)ds \text{ pour un } C \in \mathbb{R}. \]
+Réciproquement, si $y(t) = Ce^{A(t)} + e^{A(t)} \int_{t_0}^t e^{-A(s)}b(s)ds$, on trouve après calcul que $y'(t) = a(t)y(t) + b(t)$.
+D'autre part, on peut prendre $J = I$, d'où le fait que les solutions maximales sont de la forme :
+\[ (I, t \mapsto Ce^{A(t)} + \int_{t_0}^t e^{A(t)-A(s)}b(s)ds) \]
+\end{proof}
+
+\begin{definition}
+Soit $f : I \times U \to \mathbb{R}$ continue. On dit qu'une solution $(J, y)$ de l'équation $y' = f(t, y)$ est \textbf{globale} lorsque $J = I$.
+\end{definition}
+
+\begin{remark}
+Les solutions globales sont maximales. Attention, la réciproque est fausse en général.
+\end{remark}
+
+\subsection{III. Un exemple non linéaire}
+
+On considère l'ED (3) $y' = y^2$. Plus précisément, on considère l'équation $y' = f(t, y)$ avec $f : \mathbb{R} \times \mathbb{R} \to \mathbb{R}$ donnée par $f(t, x) = x^2$.
+
+\begin{definition}
+Une équation différentielle $y' = f(t, y)$ où $f$ ne dépend pas de $t$ est appelée \textbf{équation différentielle autonome}.
+\end{definition}
+
+On cherche les solutions maximales $(J, y)$ de (3).
+
+\subsubsection{1) Recherche des solutions qui ne s'annulent pas}
+
+On suppose que $(J, y)$ vérifie (3) et que $y(t) \neq 0$ pour tout $t \in J$.
+On a $y'(t) = y(t)^2$ pour tout $t \in J$, donc $\frac{y'(t)}{y^2(t)} = 1$ pour tout $t \in J$.
+Ainsi, $-1/y(t) = t + C$ pour un $C \in \mathbb{R}$.
+Donc $y(t) = \frac{-1}{t+C}$ pour un $C \in \mathbb{R}$.
+Mais cette fonction n'est pas définie en $t = -C$.
+Donc au mieux, on peut prendre $J_+ = ]-C, +\infty[$ ou $J_- = ]-\infty, -C[$.
+On a trouvé deux familles de solutions maximales : $(J_+, t \mapsto \frac{-1}{t+C})$ et $(J_-, t \mapsto \frac{-1}{t+C})$ avec $C \in \mathbb{R}$.
+Elles ne sont \textbf{pas globales}.
+
+\begin{remark}
+Les solutions maximales des équations linéaires (EL) sont toujours globales (tout peut se produire pour des équations non-linéaires).
+\end{remark}
+
+\subsubsection{2) Cas des solutions qui s'annulent}
+
+Cette fois-ci, on suppose que $(J, y)$ est une solution de (3) et qu'il existe au moins un $t_0 \in J$ tel que $y(t_0) = 0$.
+On remarque que $(I, 0)$ est une solution de (3) qui rentre dans ce cadre. On va montrer que c'est la seule.
+On peut supposer que $t_0 = 0$. En effet, je pose $z(t) = y(t + t_0)$.
+On a $z'(t) = y'(t + t_0) = y(t + t_0)^2 = z(t)^2$. Donc $(J - t_0, z)$ est solution de (3) et $z(0) = y(t_0) = 0$.
+
+On a $z(0) = 0$ et $z'(0) = z(0)^2 = 0$. De plus, $z'(t) \ge 0$ pour tout $t$, donc $z$ est croissante.
+\begin{itemize}
+    \item Ou bien $z$ est identiquement nulle et on retrouve la solution $(I, 0)$.
+    \item Ou bien $\exists T > 0$ tel que $z(T) > 0$ (*) ou $\exists T < 0$ tel que $z(T) < 0$.
+\end{itemize}
+
+On se place dans le cas (*). Pour $t \in [0, T]$, on a $0 \le z(t) \le z(T)$, donc $0 \le z'(t) \le z(t)z(t) \le z(T)z(t)$.
+Soit $a = z(T)$, on a $z'(t) \le az(t)$.
+Donc $(e^{-at}z(t))' = -ae^{-at}z(t) + e^{-at}z'(t) = e^{-at}(z'(t) - az(t)) \le 0$.
+En particulier, $e^{-at}z(t) \le e^{-a \times 0}z(0) \le 0$.
+Donc $z(t) \le 0$ pour tout $t \in [0, T]$. Mais comme $z(T) > 0$, c'est absurde.
+
+\textbf{CCL :} Les solutions maximales de (3) sont :
+\begin{itemize}
+    \item $(\mathbb{R}, 0)$ globale
+    \item $(J_-, t \mapsto \frac{-1}{t+C})$ ; $C \in \mathbb{R}$, pas globale
+    \item $(J_+, t \mapsto \frac{-1}{t+C})$ ; $C \in \mathbb{R}$, pas globale
+\end{itemize}
+
+\subsection{IV. Notion de problème de Cauchy}
+
+\begin{proposition}[unicité dans un cas facile]
+On considère l'ED $y' = f(t, y)$ où $f: I \times U \to \mathbb{R}$ est continue. On se donne $t_0 \in I, x_0 \in U$.
+Si $f$ est $\mathcal{C}^1(I \times U)$, alors le problème de Cauchy :
+\[ \begin{cases} y' = f(t, y) \\ y(t_0) = x_0 \end{cases} \]
+admet une unique solution maximale $(J, y)$ avec $t_0 \in J$.
+\end{proposition}
+
+\end{document}
