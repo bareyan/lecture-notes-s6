@@ -1,0 +1,227 @@
+\begin{document}
+\sloppy
+
+\title{CM3 : Information de Fisher et Efficacité}
+\maketitle
+
+\section{Introduction au Modèle Régulier}
+
+Dans ce chapitre, nous étudions les propriétés de l'information contenue dans un échantillon concernant un paramètre inconnu $\theta$. Nous nous plaçons dans le cadre d'un modèle statistique $(P_\theta)_{\theta \in \Theta}$ avec $\Theta \subset \mathbb{R}^p$. Nous supposons que le modèle est identifiable et dominé par une mesure $\mu$.
+
+\begin{itemize}
+    \item On note $f_\theta$ la densité de $P_\theta$ par rapport à $\mu$.
+    \item Le support de la densité est défini par $Supp_\theta = \{x \in E, f_\theta(x) > 0\}$.
+    \item Étant donné un échantillon $(X_1, \dots, X_n)$ i.i.d. de loi $P_\theta$, on note $L_n(\theta)$ la vraisemblance de l'échantillon :
+    \[ L_n(\theta) = \prod_{i=1}^n f_\theta(x_i) \]
+    \item Sur le support, on peut calculer la log-vraisemblance :
+    \[ \log L_n(\theta) = \sum_{i=1}^n \log f_\theta(x_i) \]
+    \item L'estimateur du maximum de vraisemblance (EMV) est défini par :
+    \[ \hat{\theta} = \text{Argmax}_{\theta \in \Theta} \log L_n(\theta) \]
+\end{itemize}
+
+\begin{proposition}[Propriété d'invariance de l'EMV]
+    Si $\hat{\theta}$ est l'EMV de $\theta$, alors $g(\hat{\theta})$ est un EMV de $g(\theta)$.
+\end{proposition}
+
+\textbf{Objectif :} Peut-on avoir "mieux" comme estimateur ? Pour répondre à cela, nous devons définir un cadre de régularité.
+
+\subsection{Définition du Modèle Régulier}
+
+\begin{definition}
+    Le modèle $(P_\theta)_{\theta \in \Theta}$ est dit \textbf{régulier} si :
+    \begin{enumerate}
+        \item[i)] $\Theta$ est un ouvert et pour tout $x \in E$, l'application $\theta \mapsto f_\theta(x)$ est de classe $C^1$.
+        \item[ii)] Le support de la densité ne dépend pas de $\theta$ : $S = \{x, f_\theta(x) > 0\}$.
+        \item[iii)] Pour tout $\theta$, l'application $x \mapsto \frac{\left( \frac{\partial f_\theta(x)}{\partial \theta} \right)^2}{f_\theta(x)} \mathbb{1}_{f_\theta(x) > 0}$ est intégrable ($L_1(\mu)$).
+    \end{enumerate}
+    On définit alors l'Information de Fisher du modèle par :
+    \[ I(\theta) = \int_S \frac{\left( \frac{\partial f_\theta(x)}{\partial \theta} \right)^2}{f_\theta(x)} dx \]
+    On suppose également que $I(\theta)$ est continue sur $\Theta$.
+\end{definition}
+
+\textbf{Notation :} On note souvent la dérivée de $f_\theta(x)$ par rapport à $\theta$ par $\partial_\theta f_\theta(x)$.
+
+\begin{example}[Loi Exponentielle]
+    Soit $f_\theta(x) = \theta e^{-x\theta} \mathbb{1}_{x \ge 0}$ avec $\theta \in \Theta = ]0, +\infty[$.
+    \begin{itemize}
+        \item L'application $\theta \mapsto \theta e^{-x\theta}$ est $C^\infty$.
+        \item Le support est $Supp f_\theta = \mathbb{R}^+$, qui ne dépend pas de $\theta$.
+        \item Dérivée : $\frac{\partial f_\theta}{\partial \theta}(x) = (1 - x\theta)e^{-x\theta}$.
+        \item On calcule : $\frac{\left( \frac{\partial f_\theta(x)}{\partial \theta} \right)^2}{f_\theta(x)} = \frac{(1 - x\theta)^2 (e^{-x\theta})^2}{\theta e^{-x\theta}} = \frac{(1 - x\theta)^2 e^{-x\theta}}{\theta}$.
+    \end{itemize}
+    Si $X \sim \mathcal{E}(\theta)$, on sait que $E[X^k] = \frac{k!}{\theta^k}$. Calculons $I(\theta)$ :
+    \begin{align*}
+    I(\theta) &= \int_0^\infty \frac{(1 - x\theta)^2}{\theta^2} \theta e^{-x\theta} dx = \frac{1}{\theta^2} E_\theta[(1 - X\theta)^2] \\
+    &= \frac{1}{\theta^2} E_\theta[1 - 2\theta X + \theta^2 X^2] = \frac{1}{\theta^2} [1 - 2\theta E[X] + \theta^2 E[X^2]] \\
+    &= \frac{1}{\theta^2} [1 - 2\theta \frac{1}{\theta} + \theta^2 \frac{2}{\theta^2}] = \frac{1}{\theta^2} [1 - 2 + 2] = \frac{1}{\theta^2}
+    \end{align*}
+    Cette quantité est bien continue sur $]0, +\infty[$.
+\end{example}
+
+\section{Information de Fisher et Score}
+
+\subsection{Exemples complémentaires}
+
+\begin{example}[Loi de Bernoulli $\mathcal{B}(\theta)$]
+    $X \in \{0, 1\}$. $f_\theta(0) = 1 - \theta$ et $f_\theta(1) = \theta$ par rapport à la mesure $\delta_0 + \delta_1$.
+    Pour $x \in \{0, 1\}$, $\theta \mapsto f_\theta(x)$ est $C^1$.
+    \begin{itemize}
+        \item $\frac{(\partial_\theta f_\theta(0))^2}{f_\theta(0)} = \frac{(-1)^2}{1 - \theta} = \frac{1}{1 - \theta}$
+        \item $\frac{(\partial_\theta f_\theta(1))^2}{f_\theta(1)} = \frac{1^2}{\theta} = \frac{1}{\theta}$
+    \end{itemize}
+    D'où $I(\theta) = \frac{1}{1-\theta} + \frac{1}{\theta} = \frac{1}{\theta(1-\theta)}$, continue sur $]0, 1[$.
+\end{example}
+
+\begin{example}[Modèle non régulier]
+    Soit $f_\theta(x) = \frac{1}{\theta} \mathbb{1}_{[0, \theta]}(x)$. Ici, le support $[0, \theta]$ dépend explicitement de $\theta$. Le modèle n'est pas régulier au sens de la définition précédente.
+\end{example}
+
+\subsection{Vecteur de Score}
+
+\begin{definition}
+    Soit $(X_1, \dots, X_n)$ i.i.d. de loi $P_\theta$. On appelle \textbf{score} (ou vecteur de score) la dérivée de la log-vraisemblance :
+    \[ S_n(\theta) = \frac{\partial}{\partial \theta} \log L_n(\theta) = \sum_{i=1}^n \frac{\partial}{\partial \theta} \log f_\theta(X_i) \]
+\end{definition}
+
+\begin{example}
+    Pour $X_i \sim \mathcal{E}(\theta)$ :
+    $L_n(\theta) = \theta^n e^{-\theta \sum x_i} \implies \log L_n(\theta) = n \log \theta - \theta \sum x_i$.
+    Alors $S_n(\theta) = \frac{n}{\theta} - \sum_{i=1}^n X_i$.
+\end{example}
+
+\begin{remark}
+    On remarque que $E[S_n(\theta)] = E[n(\frac{1}{\theta} - \bar{X}_n)] = n(\frac{1}{\theta} - \frac{1}{\theta}) = 0$. Le score semble être centré.
+\end{remark}
+
+\subsection{Hypothèse supplémentaire de régularité}
+
+Nous introduisons l'hypothèse (H) : pour tout estimateur $h(X)$ et tout $\theta$, les intégrales suivantes existent et on peut intervertir dérivation et intégration :
+\[ (H) : \frac{\partial}{\partial \theta} \int_S h(x) f_\theta(x) dx = \int_S h(x) \frac{\partial f_\theta}{\partial \theta}(x) dx \]
+
+\begin{remark}
+    C'est la condition d'application du théorème de domination de Lebesgue. Typiquement, on demande $h \sup_{\tilde{\theta} \in \Theta} |\frac{\partial f_{\tilde{\theta}}}{\partial \theta}(x)| \in L_1(\mu)$.
+\end{remark}
+
+\begin{proposition}
+    Sous l'hypothèse (H), le score est centré : $E_\theta[S_n(\theta)] = 0$.
+\end{proposition}
+
+\begin{proof}
+    Pour $n=1$ :
+    \[ E_\theta \left[ \frac{\partial}{\partial \theta} \log f_\theta(X) \right] = \int_S \frac{\frac{\partial f_\theta(x)}{\partial \theta}}{f_\theta(x)} f_\theta(x) dx = \int_S \frac{\partial f_\theta}{\partial \theta}(x) dx \stackrel{(H)}{=} \frac{\partial}{\partial \theta} \left( \int_S f_\theta(x) dx \right) = \frac{\partial}{\partial \theta} (1) = 0 \]
+\end{proof}
+
+\section{Information de Fisher pour un échantillon}
+
+\begin{definition}
+    L'information de Fisher associée à un échantillon $(X_1, \dots, X_n)$ est définie par :
+    \[ I_n(\theta) \stackrel{\text{déf}}{=} E_\theta \left[ \left( \frac{\partial}{\partial \theta} \log L_n(\theta) \right)^2 \right] \]
+    D'après la proposition précédente ($E[S_n]=0$), cela correspond à la variance du score :
+    \[ I_n(\theta) = \text{Var}_\theta \left( \frac{\partial}{\partial \theta} \log L_n(\theta) \right) \]
+\end{definition}
+
+\begin{example}
+    Pour $X_1, \dots, X_n \sim \mathcal{E}(\theta)$ :
+    $\frac{\partial}{\partial \theta} \log L_n(\theta) = \frac{n}{\theta} - \sum X_i$.
+    \[ I_n(\theta) = E\left[ \left( \frac{n}{\theta} - \sum X_i \right)^2 \right] = n^2 E\left[ \left( \frac{1}{\theta} - \bar{X} \right)^2 \right] = n^2 \text{Var}(\bar{X}) = n^2 \frac{1}{n} \text{Var}(X_1) = n \frac{1}{\theta^2} \]
+\end{example}
+
+\begin{proposition}
+    $I_n(\theta) = n I(\theta)$.
+\end{proposition}
+
+\begin{proof}
+    $I_n(\theta) = \text{Var} \left( \frac{\partial}{\partial \theta} \log L_n(\theta) \right) = \text{Var} \left( \sum_{i=1}^n \frac{\partial}{\partial \theta} \log f_\theta(X_i) \right)$.
+    Par indépendance des $X_i$, les variables $\frac{\partial}{\partial \theta} \log f_\theta(X_i)$ sont indépendantes, donc :
+    \[ I_n(\theta) = \sum_{i=1}^n \text{Var} \left( \frac{\partial}{\partial \theta} \log f_\theta(X_i) \right) = n \text{Var} \left( \frac{\partial}{\partial \theta} \log f_\theta(X_1) \right) = n I(\theta) \]
+\end{proof}
+
+\begin{example}
+    $(X_1, \dots, X_n)$ i.i.d. Poisson($\theta$). $f_\theta(x) = e^{-\theta} \frac{\theta^x}{x!}$.
+    $\log L_n(\theta) = -n\theta + (\sum X_i) \log \theta - \log \prod X_i!$.
+    $\frac{\partial}{\partial \theta} \log L_n(\theta) = -n + \frac{\sum X_i}{\theta} \implies I_n(\theta) = \text{Var} \left( \frac{\sum X_i}{\theta} \right) = \frac{1}{\theta^2} n \theta = \frac{n}{\theta}$.
+\end{example}
+
+\section{Information de Fisher et Dérivée Seconde}
+
+\begin{proposition}
+    En ajoutant l'hypothèse que $\theta \mapsto f_\theta(x)$ est de classe $C^2$ et que (H) s'applique à la dérivée seconde, l'information de Fisher peut s'écrire :
+    \[ I_n(\theta) = -E_\theta \left[ \frac{\partial^2}{\partial \theta^2} \log L_n(\theta) \right] \]
+\end{proposition}
+
+\begin{proof}
+    Pour $n=1$ :
+    \[ \frac{\partial^2}{\partial \theta^2} \log f_\theta(x) = \frac{\frac{\partial^2 f_\theta(x)}{\partial \theta^2}}{f_\theta(x)} - \left( \frac{\frac{\partial f_\theta(x)}{\partial \theta}}{f_\theta(x)} \right)^2 \]
+    En prenant l'espérance :
+    \[ E \left[ \frac{\partial^2}{\partial \theta^2} \log f_\theta(X) \right] = \underbrace{\int_S \frac{\partial^2 f_\theta(x)}{\partial \theta^2} dx}_{= 0 \text{ par (H)}} - \underbrace{\int_S \left( \frac{\partial \log f_\theta}{\partial \theta} \right)^2 f_\theta(x) dx}_{= I(\theta)} \]
+    On a bien $E[\partial_\theta^2 \log f_\theta] = -I(\theta)$.
+\end{proof}
+
+\textbf{Interprétation graphique :}
+L'information de Fisher mesure la courbure de la log-vraisemblance au point $\hat{\theta}$. Si la courbe est très "piquée", l'information de Fisher est grande et l'EMV est localisé de façon précise.
+
+\begin{verbatim}
+#save_to: likelihood_curvature.png
+import matplotlib.pyplot as plt
+import numpy as np
+
+theta = np.linspace(0.1, 5, 100)
+theta_hat = 2.5
+log_L = - (theta - theta_hat)**2 
+
+plt.figure(figsize=(8, 5))
+plt.plot(theta, log_L, 'k', label='log L(theta)')
+plt.axvline(x=theta_hat, color='k', linestyle='--')
+plt.annotate('', xy=(theta_hat, 0), xytext=(theta_hat, -2),
+             arrowprops=dict(arrowstyle='<-', color='black'))
+plt.text(theta_hat, -2.5, r'$\hat{\theta}$', horizontalalignment='center', fontsize=12)
+
+# Drawing a circle to represent curvature
+circle = plt.Circle((theta_hat, -1), 0.5, color='blue', fill=False, linestyle='--')
+plt.gca().add_patch(circle)
+plt.text(theta_hat - 0.6, -0.8, 'R', color='blue')
+
+plt.title("Courbure de la log-vraisemblance et Information de Fisher")
+plt.xlabel(r'$\theta$')
+plt.ylabel(r'$\log L_n(\theta)$')
+plt.ylim(-6, 1)
+plt.savefig('likelihood_curvature.png')
+\end{verbatim}
+
+\begin{figure}[h]
+\centering
+\includegraphics[ max width=\textwidth, max height=0.4\textheight, keepaspectratio]{likelihood_curvature.png}
+\caption{Lien entre la courbure de la log-vraisemblance et l'Information de Fisher.}
+\label{fig:curvature}
+\end{figure}
+
+\section{Inégalité de Cramér-Rao et Efficacité}
+
+Soit $g(\theta)$ le paramètre d'intérêt où $g : \Theta \to \mathbb{R}$.
+
+\begin{proposition}
+    Sous les hypothèses d'un modèle régulier, si pour tout $\theta$, $I(\theta) > 0$, alors pour tout estimateur $T = T(X_1, \dots, X_n)$ sans biais ($E_\theta[T] = g(\theta)$) et de variance finie, on a :
+    \[ \forall \theta \in \Theta, \text{Var}_\theta(T) \ge \frac{(g'(\theta))^2}{I_n(\theta)} = \frac{(g'(\theta))^2}{n I(\theta)} \]
+\end{proposition}
+
+\begin{proof}
+    $\forall \theta, E_\theta(T) = g(\theta) \implies \frac{\partial}{\partial \theta} E_\theta(T) = g'(\theta)$.
+    En supposant (H) et pour $n=1$ (généralisable) :
+    \begin{align*}
+    \frac{\partial}{\partial \theta} \int_S T(x) f_\theta(x) dx &= g'(\theta) \\
+    \int_S T(x) \frac{\partial f_\theta}{\partial \theta}(x) dx &= g'(\theta) \\
+    \int_S T(x) \frac{\partial_\theta f_\theta(x)}{f_\theta(x)} f_\theta(x) dx &= g'(\theta) \\
+    \int_S (T(x) - g(\theta)) \frac{\partial_\theta f_\theta(x)}{f_\theta(x)} f_\theta(x) dx &= g'(\theta) \quad (\text{car } E[S]=0)
+    \end{align*}
+    En appliquant l'inégalité de Cauchy-Schwarz pour le produit scalaire $\langle h_1, h_2 \rangle = \int h_1(x)h_2(x)f_\theta(x)dx$ :
+    \[ (g'(\theta))^2 = \left( \int_S (T(x) - g(\theta)) \frac{\partial_\theta f_\theta(x)}{f_\theta(x)} f_\theta(x) dx \right)^2 \le \int_S (T(x) - g(\theta))^2 f_\theta(x) dx \cdot \int_S \left( \frac{\partial_\theta f_\theta(x)}{f_\theta(x)} \right)^2 f_\theta(x) dx \]
+    On reconnaît les termes :
+    \[ (g'(\theta))^2 \le \text{Var}_\theta(T) \cdot I(\theta) \]
+    D'où $\text{Var}_\theta(T) \ge \frac{(g'(\theta))^2}{I(\theta)}$.
+\end{proof}
+
+\begin{definition}
+    Si un estimateur sans biais $T$ réalise l'égalité dans la borne de Cramér-Rao, alors $T$ est dit \textbf{efficace}.
+\end{definition}
+
+\end{document}

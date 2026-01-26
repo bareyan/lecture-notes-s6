@@ -1,187 +1,244 @@
 \begin{document}
 \sloppy
 
-\title{Systèmes Linéaires et Décompositions Matricielles}
+\title{Analyse des Systèmes Linéaires et Optimisation}
 \maketitle
 
-\section{Introduction aux Systèmes Linéaires}
+\section{Systèmes Linéaires et Méthodes de Résolution}
 
-\subsection{Présentation du problème}
-On s'intéresse à la résolution de systèmes d'équations linéaires de la forme :
+\subsection{Introduction}
+
+Le problème fondamental de l'algèbre linéaire numérique consiste à résoudre un système de la forme :
 \[ Ax = b \]
-où $A \in \mathbb{C}^{N \times N}$ est une matrice carrée de taille $N$, $x \in \mathbb{C}^N$ est le vecteur des inconnues et $b \in \mathbb{C}^N$ est le vecteur second membre.
+Où $A \in \mathbb{C}^{N \times N}$ est une matrice carrée et $b \in \mathbb{C}^N$ est un vecteur donné.
 
-\subsection{Lien avec la Méthode de Newton}
-Dans un contexte plus général, pour résoudre une équation non linéaire $F(x) = 0$ avec $F: \mathbb{R}^N \to \mathbb{R}^N$, on utilise la méthode de Newton. La formule de récurrence est donnée par :
-\[ x_{n+1} = x_n - F'(x_n)^{-1} F(x_n) \]
-Ici, $F'(x_n)$ représente la matrice jacobienne de $F$ évaluée en $x_n$. À chaque itération, le calcul de $x_{n+1}$ nécessite la résolution d'un système linéaire de la forme $F'(x_n) \delta x = -F(x_n)$.
+\subsection{Méthode de Newton}
 
-\section{Propriétés de l'inversibilité}
+Pour les cas non-linéaires où l'on cherche $x$ tel que $F(x) = 0$ avec $F : \mathbb{R}^N \to \mathbb{R}^N$, on utilise la méthode itérative de Newton :
+\begin{equation}
+x_{n+1} = x_n - F'(x_n)^{-1} F(x_n)
+\end{equation}
 
-\subsection{Équivalences pour le cas $A \in \mathbb{C}^{N \times N}$}
-Pour une matrice carrée $A$, l'existence et l'unicité de la solution pour tout second membre ($\exists! Ax = b, \forall b$) sont équivalentes aux propriétés suivantes :
+\subsection{Conditions d'existence et d'unicité}
+
+Si $A \in \mathbb{C}^{N \times N}$, les assertions suivantes sont équivalentes pour l'existence et l'unicité d'une solution unique ($\exists ! Ax = b, \forall b$) :
 \begin{itemize}
     \item $A$ est bijective.
-    \item $A$ est injective (par le théorème du rang, cela équivaut à la surjectivité pour une matrice carrée).
+    \item $A$ est injective (d'après le théorème du rang).
+    \item $A$ est surjective.
     \item $\det A \neq 0$.
-    \item $0$ n'est pas une valeur propre (v.p.) de $A$.
+    \item $0$ n'est pas une valeur propre de $A$.
 \end{itemize}
 
-\subsection{Cas de la matrice non-inversible}
-Si $A$ est carrée mais non-inversible, la solution (si elle existe) n'est pas unique.
-Une solution existe ($\exists \text{ sol}$) si et seulement si $b$ appartient à l'image de $A$ :
-\[ b \in \text{Im } A = \text{Run } A = \text{Vect}(A_1, \dots, A_n) \subseteq \text{Span} \]
-où $A_i$ sont les colonnes de la matrice $A$.
+\subsection{Cas des matrices non-inversibles}
+
+Soit $A$ une matrice carrée non-inversible. Dans ce cas, la solution n'est pas unique. Une solution existe si et seulement si $b$ appartient à l'image de $A$ :
+\[ \exists \text{ sol} \iff b \in \text{Im } A = \text{Vect}(A_1, \dots, A_n) \]
+où $A_1, \dots, A_n$ sont les colonnes de la matrice $A$.
 
 \begin{example}
 Considérons le système suivant :
-\[ 
-\begin{cases} 
-2x + 4y = \alpha \\
-4x + 8y = \beta 
-\end{cases} 
-\]
-L'image de la matrice $A = \begin{pmatrix} 2 & 4 \\ 4 & 8 \end{pmatrix}$ est l'ensemble des vecteurs $\binom{\alpha}{\beta}$ tels que les deux équations sont compatibles.
-On remarque que la deuxième ligne est le double de la première ($2L_1 = L_2$). Pour qu'une solution existe, on doit donc avoir :
-\[ 2\alpha = \beta \iff 2\alpha - \beta = 0 \]
-Ainsi, $\text{Im } A = \left\{ \begin{pmatrix} \alpha \\ \beta \end{pmatrix} \text{ tq } 2\alpha - \beta = 0 \right\}$.
-On peut également exprimer cela en disant que l'image est l'orthogonal du vecteur $\binom{2}{-1}$ :
-\[ \text{Im } A = \left\{ \begin{pmatrix} 2 \\ -1 \end{pmatrix} \right\}^\perp \]
+\begin{align*}
+2x + 4y &= \alpha \\
+4x + 8y &= \beta
+\end{align*}
+L'image de $A$ est donnée par :
+\[ \text{Im } A = \left\{ \begin{pmatrix} \alpha \\ \beta \end{pmatrix} \text{ tq } 2\alpha = \beta \right\} \]
+Ceci correspond à la condition $2\alpha - \beta = 0$, soit l'orthogonalité au vecteur $\begin{pmatrix} 2 \\ -1 \end{pmatrix}$.
 \end{example}
 
-\section{Sommes directes et Orthogonalité}
-
-Pour une matrice rectangulaire $A \in \mathbb{C}^{N \times M}$, nous avons les propriétés de décomposition suivantes en somme directe :
+\subsection{Propriété Fondamentale des Espaces}
 
 \begin{proposition}
-\begin{enumerate}
-    \item $\mathbb{C}^N = \text{Im } A \oplus \text{Ker}(A^*)$
-    \item $\mathbb{C}^M = \text{Im } A^* \oplus \text{Ker}(A)$
-\end{enumerate}
-Où $A^*$ désigne la matrice adjointe (transposée conjuguée) de $A$.
+Si $A \in \mathbb{C}^{N \times M}$, nous avons les décompositions en somme directe suivantes :
+\begin{align*}
+\mathbb{C}^N &= \text{Im } A \oplus \ker(A^*) \\
+\mathbb{C}^M &= \text{Im } A^* \oplus \ker(A)
+\end{align*}
 \end{proposition}
 
 \begin{proof}
-Démontrons que $\text{Ker } A = (\text{Im } A^*)^\perp$.
-
-1. Montrons d'abord que $\text{Ker } A \subset (\text{Im } A^*)^\perp$ :
-Soit $x \in \text{Ker } A$ (donc $Ax = 0$) et soit $y \in \text{Im } A^*$.
-Par définition de l'image, il existe un vecteur $z$ tel que $y = A^*z$.
-Calculons le produit scalaire $\langle x, y \rangle$ :
-\begin{align*}
-\langle x, y \rangle &= \langle x, A^*z \rangle \\
-&= \langle Ax, z \rangle \\
-&= \langle 0, z \rangle \\
-&= 0
-\end{align*}
-Donc $x$ est orthogonal à tout élément de l'image de $A^*$.
-
-2. Montrons ensuite que $(\text{Im } A^*)^\perp \subset \text{Ker } A$ :
-Soit $x \in (\text{Im } A^*)^\perp$. Cela signifie que $\forall y \in \text{Im } A^*$, $\langle x, y \rangle = 0$.
-En particulier, pour tout vecteur $z$, on a :
-\begin{align*}
-\langle x, A^*z \rangle &= 0 \\
-\langle Ax, z \rangle &= 0, \quad \forall z
-\end{align*}
-Si le produit scalaire de $Ax$ avec tout vecteur $z$ est nul, alors nécessairement :
-\[ Ax = 0 \]
-Ce qui prouve que $x \in \text{Ker } A$.
+Montrons que $\ker A = (\text{Im } A^*)^\perp$.
+\begin{enumerate}
+    \item Soit $x \in \ker A$. Alors $Ax = 0$.
+    Soit $y \in \text{Im } A^*$, il existe $z$ tel que $y = A^* z$.
+    Calculons le produit scalaire :
+    \[ \langle x, y \rangle = \langle x, A^* z \rangle = \langle Ax, z \rangle = \langle 0, z \rangle = 0 \]
+    Donc $x \in (\text{Im } A^*)^\perp$, d'où $\ker A \subset (\text{Im } A^*)^\perp$.
+    
+    \item Inversement, soit $x \in (\text{Im } A^*)^\perp$. Par définition, pour tout $y \in \text{Im } A^*$, $\langle x, y \rangle = 0$.
+    Ainsi, $\forall z, \langle x, A^* z \rangle = 0$.
+    Par propriété de l'adjoint, $\forall z, \langle Ax, z \rangle = 0$.
+    Ceci implique que $Ax = 0$, donc $x \in \ker A$.
+\end{enumerate}
+Nous en déduisons que $\ker A = (\text{Im } A^*)^\perp$.
 \end{proof}
 
-\section{Résolution Numérique : Pivot de Gauss}
+\section{Méthodes de Décomposition Directe}
 
-Supposons $A$ inversible. La méthode du pivot de Gauss permet de transformer le système pour le rendre triangulaire.
+\subsection{Pivot de Gauss}
 
+L'algorithme du pivot de Gauss permet de transformer le système en un système triangulaire.
 \begin{example}
 Considérons le système :
-\[
-\begin{cases}
-x + 2y + 3z = 1 \\
-4x + 5y + 6z = 2 \\
-7x + 8y + 10z = 3
-\end{cases}
-\]
-On effectue les opérations élémentaires sur les lignes :
+\begin{align*}
+x + 2y + 3z &= 1 \\
+4x + 5y + 6z &= 2 \\
+7x + 8y + 10z &= 3
+\end{align*}
+On effectue les opérations sur les lignes :
 \begin{align*}
 L_2 &\leftarrow L_2 - 4L_1 \\
 L_3 &\leftarrow L_3 - 7L_1
 \end{align*}
 Le système devient :
-\[
-\begin{cases}
-x + 2y + 3z = 1 \\
-0x + \dots = \dots \\
-0x + \dots = \dots
-\end{cases}
-\rightarrow \dots \rightarrow
-\begin{cases}
-\dots \\
-\dots \\
-0x + 0y + z = \dots
-\end{cases}
-\]
+\begin{align*}
+x + 2y + 3z &= 1 \\
+0x + \dots &= \dots \\
+0x + 0y + z &= \dots
+\end{align*}
 \end{example}
-
 La complexité algorithmique de cette méthode est en $O(N^3)$.
 
-\section{Décompositions Matricielles}
-
 \subsection{Décomposition LU}
-La décomposition $A = LU$ consiste à écrire $A$ comme le produit d'une matrice triangulaire inférieure (Lower) $L$ et d'une matrice triangulaire supérieure (Upper) $U$.
 
-Exemple de progression vers la forme triangulaire :
-\[ A_1 = \begin{pmatrix} 1 & 2 & 3 \\ 4 & 5 & 6 \\ 7 & 8 & 10 \end{pmatrix} \rightarrow A_2 = \begin{pmatrix} 1 & 2 & 3 \\ 0 & \times & \times \\ 0 & \times & \times \end{pmatrix} \rightarrow A_3 = \begin{pmatrix} 1 & 2 & 3 \\ 0 & \times & \times \\ 0 & 0 & \times \end{pmatrix} = U \]
+L'objectif est d'écrire $A = LU$ où $L$ est une matrice triangulaire inférieure (\textit{Tri inf}) et $U$ est une matrice triangulaire supérieure (\textit{Tri sup}).
 
-Chaque étape correspond à une multiplication à gauche par une matrice de transfert $B_n$. Par exemple :
-\[ A_2 = \begin{pmatrix} 1 & 0 & 0 \\ -4 & 1 & 0 \\ -7 & 0 & 1 \end{pmatrix} A_1 \]
-On a alors $U = B_n B_{n-1} \dots B_1 A$, ce qui donne $A = B_1^{-1} B_2^{-1} \dots B_n^{-1} U = LU$.
+\begin{itemize}
+    \item \textbf{Multiplication à gauche :} On transforme $A_1$ en $A_2$ puis en $A_3$ par des matrices de transformation triangulaires inférieures $B_n$.
+    \[ A_2 = \begin{pmatrix} 1 & & \\ -4 & 1 & \\ -7 & 0 & 1 \end{pmatrix} A_1 \]
+    \item \textbf{Construction :} $U = B_n B_{n-1} \dots B_1 A$.
+    \item \textbf{Inversion :} $A = B_1^{-1} B_2^{-1} \dots B_n^{-1} U = LU$.
+\end{itemize}
 
-\subsection{Aspects Pratiques}
-En pratique, on utilise souvent une matrice de permutation $P$ pour assurer la stabilité numérique (choix du pivot), ce qui donne la décomposition :
-\[ PA = LU \]
-Le système $Ax = b$ devient $LUx = Pb$. On pose $y = Ux$, on résout $Ly = Pb$ par descente, puis $Ux = y$ par remontée.
+\textbf{Cas pratique :} On utilise souvent la forme $PA = LU$ où $P$ est une matrice de permutation pour assurer la stabilité numérique. Pour résoudre $Ax=b$, on résout successivement :
+\begin{enumerate}
+    \item $Ly = Pb$ (par descente).
+    \item $Ux = y$ (par remontée).
+\end{enumerate}
 
-\subsection{Décomposition QR (Gram-Schmidt)}
-Pour une matrice $A \in \mathbb{C}^{N \times M}$ avec $M \le N$, on cherche $A = QR$ où $Q$ est une matrice dont les colonnes sont orthogonales ($Q^*Q = I_M$) et $R$ est triangulaire supérieure.
-Les vecteurs $q_n$ sont obtenus par combinaison linéaire des colonnes $u_n$ de $A$ :
+\section{Factorisation Orthogonale et Cas Particuliers}
+
+\subsection{Procédé de Gram-Schmidt}
+
+Soient $u_1, \dots, u_M \in \mathbb{C}^N$ des vecteurs avec $M \le N$. On construit une base orthonormée $q_1, \dots, q_M$ telle que $Q^* Q = I_M$.
 \begin{align*}
 q_1 &= \frac{u_1}{\|u_1\|} \\
 q_2 &= \frac{u_2 - \langle q_1, u_2 \rangle q_1}{\|u_2 - \langle q_1, u_2 \rangle q_1\|}
 \end{align*}
-On a la relation $Q = AR^{-1}$.
+Chaque $q_n$ est obtenu par combinaison linéaire de $u_1, \dots, u_n$. On peut alors écrire $Q = AR^{-1}$, soit $A = QR$.
+
+\subsection{Décomposition QR}
+
+$A = QR$ où $Q$ est une matrice orthogonale ($Q^* Q = I$) et $R$ est une matrice triangulaire supérieure.
+Pour résoudre $QRx = b$, on calcule $y = Q^* b$, puis on résout le système triangulaire $Rx = y$.
 
 \subsection{Décomposition de Cholesky}
-Si $A$ est une matrice symétrique définie positive, elle admet une décomposition de la forme :
+
+Si $A$ est une matrice symétrique définie positive, elle admet une décomposition unique de la forme :
 \[ A = LL^T \]
-où $L$ est une matrice triangulaire inférieure.
 
-\section{Problème des Moindres Carrés}
+\section{Problèmes de Moindres Carrés}
 
-\subsection{Formulation}
-On cherche à ajuster un modèle linéaire $y = \alpha X + \beta$ sur un ensemble de points. On cherche $(\alpha, \beta) \in \mathbb{R}^2$ qui minimise la somme des carrés des erreurs :
-\[ \min \sum_{i=1}^N |y_i - (\alpha X_i + \beta)|^2 \]
-En posant l'erreur $e_i = y_i - (\alpha X_i + \beta)$, on cherche à minimiser $\|e\|^2 = \langle e, e \rangle$.
+\subsection{Approche Linéaire}
 
-Sous forme matricielle, si on définit $e = y - A \binom{\alpha}{\beta}$ avec $A = \begin{pmatrix} X_1 & 1 \\ \vdots & \vdots \\ X_N & 1 \end{pmatrix}$, on veut minimiser :
-\[ \left\| y - A \begin{pmatrix} \alpha \\ \beta \end{pmatrix} \right\|^2 \]
+On cherche à ajuster une droite $y = \alpha X + \beta$. Pour un ensemble de points $(x_i, y_i)$, on cherche $(\alpha, \beta) \in \mathbb{R}^2$ qui minimise :
+\[ \sum_{i=1}^N |y_i - (\alpha x_i + \beta)|^2 \]
+Soit $e_i = y_i - (\alpha x_i + \beta)$ le résidu. On veut minimiser $\|e\|^2 = \langle e, e \rangle$.
 
-\subsection{Cas général et Formes Normales}
-De façon générale, pour $A \in \mathbb{R}^{N \times M}$ et $b \in \mathbb{R}^N$ avec $N \gg M$, on cherche $x \in \mathbb{R}^M$ minimisant $\|Ax - b\|^2$.
+\subsection{Formulation Matricielle}
 
-Développement de la fonction à minimiser :
+Le problème se généralise à $A \in \mathbb{R}^{N \times M}$ et $b \in \mathbb{R}^N$ avec $N \gg M$. On cherche $x$ tel que :
+\[ \min_{x \in \mathbb{R}^M} \|Ax - b\|^2 \]
+Développons la norme au carré :
 \begin{align*}
 \|Ax - b\|^2 &= \langle Ax - b, Ax - b \rangle \\
 &= (Ax)^T(Ax) - b^T Ax - (Ax)^T b + \|b\|^2 \\
 &= x^T A^T A x - 2 (A^T b)^T x + \|b\|^2
 \end{align*}
 
-Pour trouver le minimum, on annule la dérivée par rapport à $x$ :
-\begin{align*}
-2 A^T A x - 2 (A^T b) &= 0 \\
-2 A^T A x &= 2 A^T b
-\end{align*}
+\subsection{Équations Normales}
 
-On obtient ainsi les \textbf{formes normales} :
-\[ A^T A x = A^T b \]
+En dérivant par rapport à $x$, on cherche le point où le gradient s'annule :
+\[ 2 A^T A x - 2 A^T b = 0 \]
+On obtient les \textbf{formes normales} :
+\begin{equation}
+A^T A x = A^T b
+\end{equation}
+
+\section{Analyse de Convergence et Optimisation}
+
+\subsection{Étude de la fonctionnelle $f(x) = \|Ax - b\|^2$}
+
+Soit $f(x) = \|Ax - b\|^2$. Calculons ses dérivées :
+\begin{itemize}
+    \item \textbf{Gradient :} $\nabla f(x) = A^T Ax - A^T b$.
+    \item \textbf{Hessienne :} $\nabla^2 f(x) = A^T A$. C'est la matrice de Gram.
+\end{itemize}
+Les éléments de la matrice de Gram sont $(A^T A)_{ij} = \langle a_i, a_j \rangle$, où $a_i$ sont les colonnes de $A$.
+
+\textbf{Propriété :} $A^T A$ est semi-définie positive. En effet :
+\[ x^T A^T A x = (Ax)^T Ax = \|Ax\|^2 \ge 0 \]
+Si $A$ est injective ($\ker A = \{0\}$), alors $\|Ax\|^2 = 0 \implies x = 0$, et $A^T A$ est définie positive.
+
+\subsection{Coercivité}
+
+Une fonction est dite coercive si $\lim_{\|x\| \to \infty} f(x) = +\infty$.
+Si $A$ est injective, on a une "injectivité quantitative" : $\exists \beta > 0$ tel que $\|Ax\| \ge \beta \|x\|$.
+Alors :
+\[ f(x) \ge \beta^2 \|x\|^2 - C \|x\| + \|b\|^2 \]
+Ce qui prouve que $f$ est coercive.
+
+\subsection{Unicité du Minimiseur}
+
+\begin{proof}
+Soient $x$ et $y$ deux minimiseurs de $f$.
+Considérons la fonction auxiliaire $\phi(t) = f(x + t(y-x))$.
+Comme $x$ est un minimiseur, $\phi(0)$ est un minimum, donc $\phi'(0) = 0$.
+Calculons les dérivées :
+\begin{align*}
+\phi'(t) &= (y-x)^T \nabla f(x + t(y-x)) \\
+\phi''(t) &= (y-x)^T \nabla^2 f(x + t(y-x)) (y-x) = (y-x)^T (A^T A) (y-x)
+\end{align*}
+D'après l'injectivité quantitative :
+\[ \phi''(t) = \|A(y-x)\|^2 \ge \beta \|y-x\|^2 \]
+Si $x \neq y$, alors $\phi''(t) > 0$, ce qui implique que la fonction est strictement convexe et que le minimiseur est unique.
+\end{proof}
+
+\begin{verbatim}
+#save_to: minimizers_plot.png
+import matplotlib.pyplot as plt
+import matplotlib.patches as patches
+import numpy as np
+
+fig, ax = plt.subplots(figsize=(6, 4))
+ax.axhline(0, color='black', linewidth=1)
+ax.axvline(0, color='black', linewidth=1)
+
+# Représentation schématique des points x et y
+ax.scatter([2], [1.5], color='red', label='x')
+ax.scatter([-1], [0.5], color='blue', label='y')
+ax.text(2.1, 1.6, 'x')
+ax.text(-1.3, 0.6, 'y')
+
+# Axe t entre x et y
+ax.annotate('', xy=(2, 1.5), xytext=(-1, 0.5),
+            arrowprops=dict(arrowstyle='<->', color='gray', linestyle='dashed'))
+
+ax.set_xlim(-3, 4)
+ax.set_ylim(-1, 3)
+ax.set_title("Schéma des minimiseurs potentiels et segment [x,y]")
+plt.grid(True, linestyle=':')
+plt.savefig('minimizers_plot.png')
+\end{verbatim}
+
+\begin{figure}[h]
+\centering
+\includegraphics[ max width=\textwidth,
+max height=0.4\textheight,
+keepaspectratio]{minimizers_plot.png}
+\caption{Représentation de la recherche d'unicité entre deux points x et y.}
+\label{fig:minimizers}
+\end{figure}
 
 \end{document}

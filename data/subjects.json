@@ -7,11 +7,19 @@
           "title": "Cours 2",
           "notes": [],
           "files": [
-            "/data/user/0/com.sipanbareyan.oneclass/app_flutter/OneClass/sync_files/Algèbre_linéaire_pour_analyse_(MDD_351)/Cours_2/CM2.pdf"
+            "/data/user/0/com.sipanbareyan.oneclass/app_flutter/OneClass/sync_files/Algèbre_linéaire_pour_analyse_(MDD_351)/Cours_2/CM2.pdf",
+            "/data/user/0/com.sipanbareyan.oneclass/app_flutter/OneClass/sync_files/Algèbre_linéaire_pour_analyse_(MDD_351)/Cours_2/Algcm2cont.pdf"
           ],
           "images": [
             "/data/user/0/com.sipanbareyan.oneclass/app_flutter/OneClass/sync_files/Algèbre_linéaire_pour_analyse_(MDD_351)/Cours_2/fm8.jpg"
           ],
+          "videos": []
+        },
+        {
+          "title": "Cours 3",
+          "notes": [],
+          "files": [],
+          "images": [],
           "videos": []
         }
       ],
@@ -35,6 +43,15 @@
           "notes": [],
           "files": [
             "/data/user/0/com.sipanbareyan.oneclass/app_flutter/OneClass/sync_files/Inférence_statistique_(MDD_353)/Cours_2/CM2.pdf"
+          ],
+          "images": [],
+          "videos": []
+        },
+        {
+          "title": "Cours 3",
+          "notes": [],
+          "files": [
+            "/data/user/0/com.sipanbareyan.oneclass/app_flutter/OneClass/sync_files/Inférence_statistique_(MDD_353)/Cours_3/Stat3.pdf"
           ],
           "images": [],
           "videos": []
@@ -96,5 +113,5 @@
       "globalImages": []
     }
   },
-  "exportedAt": "2026-01-19T16:34:05.115463"
+  "exportedAt": "2026-01-26T15:26:49.174695"
 }
